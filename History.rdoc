@@ -1,3 +1,7 @@
+=== 4.3.2 / 2015-03-31
+
+* Version bump to publish new location of Commander to Rubygems. Moved to https://github.com/commander-rb/commander
+
 === 4.3.1 / 2015-03-27
 
 * Fix various Ruby warnings for circular requires, etc.
