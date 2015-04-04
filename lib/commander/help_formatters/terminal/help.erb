@@ -1,5 +1,10 @@
-<% max_command_length = @commands.keys.max_by(&:size).size %>
-<% max_aliases_length = @aliases.keys.max_by(&:size).size %>
+<%
+  # TODO: move into formatter?
+  longest_command = @commands.keys.max_by(&:size)
+  max_command_length = longest_command ? longest_command.size : 20
+  longest_alias = @aliases.keys.max_by(&:size)
+  max_aliases_length = longest_alias ? longest_alias.size : 20
+%>
   <%= $terminal.color "NAME", :bold %>:
 
     <%= program :name %>
