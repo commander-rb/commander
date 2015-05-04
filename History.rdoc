@@ -1,6 +1,11 @@
+=== 4.3.4 / 2015-05-03
+
+* Fixed a regression with the compact help formatter.
+
 === 4.3.3 / 2015-04-21
 
 * Updated to highline 1.7.2 to fix a regression with terminal size (https://github.com/JEG2/highline/pull/139).
+* Help formatting updated to look better for commands with long names. (@jszwedko)
 
 === 4.3.2 / 2015-03-31
 

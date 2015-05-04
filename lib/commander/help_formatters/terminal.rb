@@ -4,11 +4,11 @@ module Commander
   module HelpFormatter
     class Terminal < Base
       def render
-        template(:help).result @runner.get_binding
+        template(:help).result(ProgramContext.new(@runner).get_binding)
       end
 
       def render_command(command)
-        template(:command_help).result command.get_binding
+        template(:command_help).result(Context.new(command).get_binding)
       end
 
       def template(name)
