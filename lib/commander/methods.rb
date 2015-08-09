@@ -4,6 +4,8 @@ module Commander
     include Commander::UI::AskForClass
     include Commander::Delegates
 
-    $terminal.wrap_at = HighLine::SystemExtensions.terminal_size.first - 5 rescue 80 if $stdin.tty?
+    if $stdin.tty? && (cols = $terminal.output_cols) >= 40
+      $terminal.wrap_at = cols - 5
+    end
   end
 end
