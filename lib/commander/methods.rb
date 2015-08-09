@@ -4,11 +4,8 @@ module Commander
     include Commander::UI::AskForClass
     include Commander::Delegates
 
-    if $stdin.tty?
-      screen_width = HighLine::SystemExtensions.terminal_size.first rescue 80
-      if screen_width >= 5
-        $terminal.wrap_at = screen_width - 5
-      end
+    if $stdin.tty? && (cols = $terminal.output_cols) >= 5
+      $terminal.wrap_at = cols - 5
     end
   end
 end
