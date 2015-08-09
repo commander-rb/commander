@@ -1,3 +1,7 @@
+=== 4.3.5 / 2015-08-09
+
+* Fixed a bug with small terminal widths, changed minimum screen width for wrapping to 40 columns. (@toolmantim)
+
 === 4.3.4 / 2015-05-03
 
 * Fixed a regression with the compact help formatter.
