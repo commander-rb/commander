@@ -42,6 +42,37 @@ describe Commander do
     end
   end
 
+  describe '#load_command' do
+    context 'when the file does not exist' do
+      it 'should load the command defined in the file' do
+        expect { load_command File.expand_path('../support/commands/doesnt_exist.rb', __FILE__) }.to raise_error(Errno::ENOENT)
+      end
+    end
+
+    context 'when the file exists' do
+      it 'should load the command defined in the file' do
+        load_command File.expand_path('../support/commands/loaded_test.rb', __FILE__)
+        expect(command(:loaded_test)).to be_instance_of(Commander::Command)
+      end
+    end
+  end
+
+  describe '#load_commands' do
+    context 'when passed a string' do
+      it 'should load the commands defined in the files matched by the glob' do
+        load_commands File.expand_path('../support/commands/loaded_test.rb', __FILE__)
+        expect(command(:loaded_test)).to be_instance_of(Commander::Command)
+      end
+    end
+
+    context 'when passed an array' do
+      it 'should load the commands defined in the files matched by the glob' do
+        load_commands Dir[File.expand_path('../support/commands/*.rb', __FILE__)]
+        expect(command(:loaded_test)).to be_instance_of(Commander::Command)
+      end
+    end
+  end
+
   describe '#separate_switches_from_description' do
     it 'should seperate switches and description returning both' do
       switches, description = *Commander::Runner.separate_switches_from_description('-h', '--help', 'display help')

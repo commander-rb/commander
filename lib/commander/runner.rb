@@ -224,6 +224,22 @@ module Commander
       @commands[name.to_s]
     end
 
+    ##
+    # Load a command defined in file _path_.
+    def load_command(path)
+      instance_eval ::File.read(path)
+    end
+
+    ##
+    # Load all commands defined in files within paths _glob_.
+    def load_commands(glob)
+      if glob.is_a?(::Array)
+        glob.each { |path| load_command path }
+      elsif glob.is_a?(::String)
+        ::Dir[glob].each { |path| load_command path }
+      end
+    end
+
     #:stopdoc:
 
     ##

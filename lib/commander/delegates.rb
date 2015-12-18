@@ -2,6 +2,8 @@ module Commander
   module Delegates
     %w(
       add_command
+      load_command
+      load_commands
       command
       program
       run!
