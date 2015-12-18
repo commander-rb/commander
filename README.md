@@ -130,6 +130,40 @@ Commander.configure do
 end
 ```
 
+### Loading command definition files
+
+You may define a command in a separate file while still using the same simple DSL, like the below:
+
+```ruby
+# /my/commands/hello.rb
+
+command :hello do |c|
+  c.syntax = 'hello'
+  c.summary = 'Example command defined in a file'
+
+  c.action do |args, options|
+    puts "Hello, World!"
+  end
+end
+```
+
+Then you can load that file (or files using a glob) and the defined command(s) into your program (this example uses the block style above):
+
+```ruby
+require 'rubygems'
+require 'commander'
+
+Commander.configure do
+  program :name, 'Foo Bar'
+  program :version, '1.0.0'
+  program :description, 'Stupid command that prints foo or bar.'
+
+  load_command 'my/commands/hello.rb'
+  # OR to load all commands in a directory
+  load_commands 'my/commands/*.rb'
+end
+```
+
 ## HighLine
 
 As mentioned above, the highline gem is imported into the global scope. Here
