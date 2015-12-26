@@ -19,8 +19,8 @@ module Commander
     # Temporarily defines a `command` method on the top-level Object class
     # so that we can load files (rather than eval them) and have the DSL
     # syntax remain the same, forwarding the call along to the Runner instance.
-    def with_command_context(&block)
-      return if !block_given?
+    def with_command_context
+      return unless block_given?
 
       Object.send :define_method, :command do |*args, &block|
         Runner.instance.command(*args, &block)
@@ -44,6 +44,5 @@ module Commander
         fns.each { |fn| load fn }
       end
     end
-
   end
 end

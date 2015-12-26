@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Commander::Loader do
-
   describe '.instance' do
     it 'should return an instance of the class' do
       expect(described_class.instance).to be_an_instance_of(described_class)
