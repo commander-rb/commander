@@ -227,6 +227,7 @@ module Commander
     ##
     # Load a command defined in file _path_.
     def load_command(path)
+      #binding.eval ::File.read(path)
       instance_eval ::File.read(path)
     end
 
