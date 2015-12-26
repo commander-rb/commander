@@ -227,18 +227,14 @@ module Commander
     ##
     # Load a command defined in file _path_.
     def load_command(path)
-      #binding.eval ::File.read(path)
-      instance_eval ::File.read(path)
+      Loader.load_file(path)
     end
 
     ##
     # Load all commands defined in files within paths _glob_.
     def load_commands(glob)
-      if glob.is_a?(::Array)
-        glob.each { |path| load_command path }
-      elsif glob.is_a?(::String)
-        ::Dir[glob].each { |path| load_command path }
-      end
+      glob = Dir[glob] if glob.is_a?(::String)
+      Loader.load_files(glob)
     end
 
     #:stopdoc:

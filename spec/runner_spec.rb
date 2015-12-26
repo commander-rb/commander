@@ -44,8 +44,8 @@ describe Commander do
 
   describe '#load_command' do
     context 'when the file does not exist' do
-      it 'should load the command defined in the file' do
-        expect { load_command File.expand_path('../support/commands/doesnt_exist.rb', __FILE__) }.to raise_error(Errno::ENOENT)
+      it 'should raise a LoadError' do
+        expect { load_command File.expand_path('../support/commands/doesnt_exist.rb', __FILE__) }.to raise_error(LoadError)
       end
     end
 
