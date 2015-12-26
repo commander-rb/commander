@@ -22,17 +22,13 @@ module Commander
     def with_command_context(&block)
       return if !block_given?
 
-      Object.class_eval do
-        def command(*args, &block)
-          Runner.instance.command(*args, &block)
-        end
+      Object.send :define_method, :command do |*args, &block|
+        Runner.instance.command(*args, &block)
       end
 
       yielded = yield
 
-      Object.class_eval do
-        undef_method :command
-      end
+      Object.send :undef_method, :command
 
       yielded
     end
