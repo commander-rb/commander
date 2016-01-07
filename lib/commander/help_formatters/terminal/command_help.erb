@@ -29,7 +29,7 @@
 	<% for option in @options -%>
 
     <%= option[:switches].join ', ' %> 
-        <%= option[:description] %>
+        <%= Commander::HelpFormatter.indent 8, option[:description] %>
 	<% end -%>
 <% end -%>
 
