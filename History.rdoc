@@ -1,3 +1,8 @@
+=== 4.3.6 / 2016-01-26
+
+* Fix deprecation warnings on Ruby 2.3.0.
+* Indent option descriptions the same way as program and command descriptions. (@badeball)
+
 === 4.3.5 / 2015-08-09
 
 * Fixed a bug with small terminal widths, changed minimum screen width for wrapping to 40 columns. (@toolmantim)
