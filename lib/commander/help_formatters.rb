@@ -43,7 +43,7 @@ module Commander
     module_function
 
     def indent(amount, text)
-      text.gsub("\n", "\n" + (' ' * amount))
+      text.to_s.gsub("\n", "\n" + (' ' * amount))
     end
   end
 end
