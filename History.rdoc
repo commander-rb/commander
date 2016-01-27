@@ -1,4 +1,8 @@
-=== 4.3.6 / 2016-01-26
+=== 4.3.7 / 2016-01-26
+
+* Fix regression in help formatter introduced in 4.3.6.
+
+=== 4.3.6 / 2016-01-26 [YANKED]
 
 * Fix deprecation warnings on Ruby 2.3.0.
 * Indent option descriptions the same way as program and command descriptions. (@badeball)
