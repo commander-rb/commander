@@ -61,7 +61,7 @@ command :init do |c|
               end
             end
         
-            MyApplication.new.run 
+            MyApplication.new.run #if $0 == __FILE__
             ...
         end
 
