@@ -12,10 +12,10 @@ command :init do |c|
   c.summary = 'Initialize a commander template'
   c.description = 'Initialize an empty <file> with a commander template,
     allowing very quick creation of commander executables.'
-  c.example 'Create a new classic style template file.', 
-  'commander init bin/my_executable'
-  c.example 'Create a new modular style template file .', 
-    'commander init --modular bin/my_executable'
+  c.example 'Create a new classic style template file.',
+            'commander init bin/my_executable'
+  c.example 'Create a new modular style template file .',
+            'commander init --modular bin/my_executable'
   c.option '-m', '--modular', 'Initialize a modular style template'
   c.action do |args, options|
     file = args.shift || abort('file argument required.')
@@ -27,19 +27,19 @@ command :init do |c|
         File.open(file, 'w') do |f|
           f.write <<-"...".gsub!(/^ {10}/, '')
           #!/usr/bin/env ruby
-          
+
           require 'rubygems'
           require 'commander'
-          
+
           class MyApplication
             include Commander::Methods
             # include whatever modules you need
-          
+
             def run
-              program :name, '#{name}' 
-              program :version, '0.0.1' 
+              program :name, '#{name}'
+              program :version, '0.0.1'
               program :description, '#{description}'
-          
+
           ...
           commands.each do |command|
             f.write <<-"...".gsub!(/^ {12}/, '')
@@ -53,14 +53,14 @@ command :init do |c|
                     # Do something or c.when_called #{name.capitalize}::Commands::#{command.capitalize}
                   end
                 end
-            
+
                 ...
           end
           f.write <<-"...".gsub!(/^ {12}/, '')
                 run!
               end
             end
-        
+
             MyApplication.new.run #if $0 == __FILE__
             ...
         end
@@ -106,54 +106,5 @@ command :init do |c|
         abort e
       end
     end
-  end  
-end    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  end
+end
