@@ -329,8 +329,8 @@ module Commander
         [Float, Integer, String, Symbol, Regexp, Array, File, Pathname] +
         # All Classes that respond to #parse
         Object.constants.map do |const|
-          # const_get(:TimeoutError) issues a deprecation warning on ruby 2.3.0
-          Object.const_get(const) unless const == :TimeoutError
+          # Ignore constants that trigger deprecation warnings
+          Object.const_get(const) unless [:Config, :TimeoutError].include?(const)
         end.select do |const|
           const.class == Class && const.respond_to?(:parse)
         end
