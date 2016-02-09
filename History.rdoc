@@ -1,3 +1,7 @@
+=== 4.3.8 / 2016-02-09
+
+* Fix regression for deprecation warnings.
+
 === 4.3.7 / 2016-01-26
 
 * Fix regression in help formatter introduced in 4.3.6.
