@@ -13,17 +13,17 @@ command :init do |c|
   c.description = 'Initialize an empty <file> with a commander template,
     allowing very quick creation of commander executables.'
   c.example 'Create a new classic style template file.',
-            'commander init bin/my_executable'
-  c.example 'Create a new modular style template file .',
-            'commander init --modular bin/my_executable'
+  'commander init bin/my_executable'
+  c.example 'Create a new modular style template file.',
+    'commander init --modular bin/my_executable'
   c.option '-m', '--modular', 'Initialize a modular style template'
   c.action do |args, options|
     file = args.shift || abort('file argument required.')
     name = ask 'Machine name of program: '
     description = ask 'Describe your program: '
     commands = ask_for_array 'List the commands you wish to create: '
-    if options.modular
-      begin
+    begin
+      if options.modular
         File.open(file, 'w') do |f|
           f.write <<-"...".gsub!(/^ {10}/, '')
           #!/usr/bin/env ruby
@@ -54,24 +54,20 @@ command :init do |c|
                   end
                 end
 
-                ...
+            ...
           end
           f.write <<-"...".gsub!(/^ {12}/, '')
                 run!
               end
             end
 
-            MyApplication.new.run #if $0 == __FILE__
-            ...
+            MyApplication.new.run if $0 == __FILE__
+          ...
         end
 
         File.chmod(0755, file)
         say "Initialized modular template in #{file}"
-      rescue => e
-        abort e
-      end
-    else
-      begin
+      else
         File.open(file, 'w') do |f|
           f.write <<-"...".gsub!(/^ {10}/, '')
           #!/usr/bin/env ruby
@@ -102,9 +98,9 @@ command :init do |c|
         end
         File.chmod 0755, file
         say "Initialized template in #{file}"
-      rescue => e
-        abort e
       end
+    rescue => e
+      abort e
     end
   end
 end
