@@ -12,10 +12,8 @@ command :init do |c|
   c.summary = 'Initialize a commander template'
   c.description = 'Initialize an empty <file> with a commander template,
     allowing very quick creation of commander executables.'
-  c.example 'Create a new classic style template file.',
-  'commander init bin/my_executable'
-  c.example 'Create a new modular style template file.',
-    'commander init --modular bin/my_executable'
+  c.example 'Create a new classic style template file.', 'commander init bin/my_executable'
+  c.example 'Create a new modular style template file.', 'commander init --modular bin/my_executable'
   c.option '-m', '--modular', 'Initialize a modular style template'
   c.action do |args, options|
     file = args.shift || abort('file argument required.')
