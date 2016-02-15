@@ -335,6 +335,8 @@ module Commander
           switches.map! { |s| s[0, s.index('=') || s.index(' ') || s.length] }
         end
 
+        switches = expand_optionally_negative_switches(switches)
+
         past_switch, arg_removed = false, false
         args.delete_if do |arg|
           if switches.any? { |s| arg[0, s.length] == s }
@@ -346,6 +348,20 @@ module Commander
             arg_removed = true
             false
           end
+        end
+      end
+    end
+
+    # expand switches of the style '--[no-]blah' into both their
+    # '--blah' and '--no-blah' variants, so that they can be
+    # properly detected and removed
+    def expand_optionally_negative_switches(switches)
+      switches.reduce([]) do |memo, val|
+        if val =~ /\[no-\]/
+          memo << val.gsub(/\[no-\]/, '')
+          memo << val.gsub(/\[no-\]/, 'no-')
+        else
+          memo << val
         end
       end
     end

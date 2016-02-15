@@ -270,6 +270,32 @@ describe Commander do
       command_runner.remove_global_options options, args
       expect(args).to eq(%w(alpha beta))
     end
+
+    it 'should remove a switch that is the positive form of the [no-] option' do
+      options, args = [], []
+      options << { switches: ['-g', '--[no-]good'] }
+      options << { switches: ['-y', '--yes ARG'] }
+      options << { switches: ['-a', '--alternative=ARG'] }
+      args << '--good' << 'alpha'
+      args << '--yes' << 'deleted'
+      args << '-a' << 'deleted'
+      args << 'beta'
+      command_runner.remove_global_options options, args
+      expect(args).to eq(%w(alpha beta))
+    end
+
+    it 'should remove a switch that is the negative form of the [no-] option' do
+      options, args = [], []
+      options << { switches: ['-g', '--[no-]good'] }
+      options << { switches: ['-y', '--yes ARG'] }
+      options << { switches: ['-a', '--alternative=ARG'] }
+      args << '--no-good' << 'alpha'
+      args << '--yes' << 'deleted'
+      args << '-a' << 'deleted'
+      args << 'beta'
+      command_runner.remove_global_options options, args
+      expect(args).to eq(%w(alpha beta))
+    end
   end
 
   describe '--trace' do
