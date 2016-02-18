@@ -37,6 +37,10 @@ To generate a quick template for a commander app, run:
 
     $ commander init yourfile.rb
 
+To generate a quick modular style template for a commander app, run:
+
+    $ commander init --modular yourfile.rb
+
 ## Example
 
 For more option examples view the `Commander::Command#option` method. Also
