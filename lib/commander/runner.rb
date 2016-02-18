@@ -339,7 +339,7 @@ module Commander
 
         past_switch, arg_removed = false, false
         args.delete_if do |arg|
-          if switches.any? { |s| arg[0, s.length] == s }
+          if switches.any? { |s| s[0, arg.length] == arg }
             arg_removed = !switch_has_arg
             past_switch = true
           elsif past_switch && !arg_removed && arg !~ /^-/
