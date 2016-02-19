@@ -1,3 +1,9 @@
+=== 4.4.0 / 2016-02-19
+
+* Add modular style template initialization. (@lebogan)
+* Allow option names that start with a global option name.
+* Fix handling of negatable global flags. (@mfurtak)
+
 === 4.3.8 / 2016-02-09
 
 * Fix regression for deprecation warnings.

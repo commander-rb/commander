@@ -1,3 +1,3 @@
 module Commander
-  VERSION = '4.3.8'
+  VERSION = '4.4.0'
 end
