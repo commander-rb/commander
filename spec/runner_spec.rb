@@ -110,6 +110,28 @@ describe Commander do
       end.run!
       expect(quiet).to be true
     end
+
+    it 'should be inherited by commands when the positive form of a [no-] option' do
+      quiet = nil
+      new_command_runner 'foo', '--quiet' do
+        global_option('--[no-]quiet', 'Suppress output') {}
+        command :foo do |c|
+          c.when_called { |_, options| quiet = options.quiet }
+        end
+      end.run!
+      expect(quiet).to be true
+    end
+
+    it 'should be inherited by commands when the negative form of a [no-] option' do
+      quiet = nil
+      new_command_runner 'foo', '--no-quiet' do
+        global_option('--[no-]quiet', 'Suppress output') {}
+        command :foo do |c|
+          c.when_called { |_, options| quiet = options.quiet }
+        end
+      end.run!
+      expect(quiet).to be false
+    end
   end
 
   describe '#parse_global_options' do
