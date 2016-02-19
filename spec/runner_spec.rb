@@ -318,6 +318,14 @@ describe Commander do
       command_runner.remove_global_options options, args
       expect(args).to eq(%w(alpha beta))
     end
+
+    it 'should not remove options that start with a global option name' do
+      options, args = [], []
+      options << { switches: ['-v', '--version'] }
+      args << '--versionCode' << 'something'
+      command_runner.remove_global_options options, args
+      expect(args).to eq(%w(--versionCode something))
+    end
   end
 
   describe '--trace' do
