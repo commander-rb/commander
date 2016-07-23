@@ -8,6 +8,7 @@ module Commander
       global_option
       alias_command
       default_command
+      active_command
       always_trace!
       never_trace!
     ).each do |meth|
