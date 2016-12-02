@@ -1,3 +1,8 @@
+=== 4.4.1 / 2016-12-02
+
+* Fix #36 - Warning about MissingSourceFile (@fallwith)
+* Fix build on Ruby 1.9
+
 === 4.4.0 / 2016-02-19
 
 * Add modular style template initialization. (@lebogan)
