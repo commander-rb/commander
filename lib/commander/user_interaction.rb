@@ -330,7 +330,7 @@ module Commander
         # All Classes that respond to #parse
         Object.constants.map do |const|
           # Ignore constants that trigger deprecation warnings
-          Object.const_get(const) unless [:Config, :TimeoutError].include?(const)
+          Object.const_get(const) unless [:Config, :TimeoutError, :MissingSourceFile].include?(const)
         end.select do |const|
           const.class == Class && const.respond_to?(:parse)
         end
