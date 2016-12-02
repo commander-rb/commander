@@ -23,4 +23,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('rake')
   s.add_development_dependency('simplecov')
   s.add_development_dependency('rubocop', '~> 0.29.1')
+  if RUBY_VERSION < '2.0'
+    s.add_development_dependency('json', '< 2.0')
+  end
 end
