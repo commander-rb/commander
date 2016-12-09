@@ -246,7 +246,7 @@ module Commander
 
     def valid_command_names_from(*args)
       arg_string = args.delete_if { |value| value =~ /^-/ }.join ' '
-      commands.keys.find_all { |name| name if /^#{name}\b/.match arg_string }
+      commands.keys.find_all { |name| name if arg_string =~ /^#{name}\b/ }
     end
 
     ##
