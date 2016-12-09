@@ -407,6 +407,23 @@ describe Commander do
     it 'can be used before or after the command and options' do
       expect(run('test', '--help')).to eq("Implement help for test here\n")
     end
+
+    describe 'help_paging program information' do
+      it 'enables paging when enabled' do
+        run('--help') { program :help_paging, true }
+        expect(Commander::UI).to have_received(:enable_paging)
+      end
+
+      it 'is enabled by default' do
+        run('--help')
+        expect(Commander::UI).to have_received(:enable_paging)
+      end
+
+      it 'does not enable paging when disabled' do
+        run('--help') { program :help_paging, false }
+        expect(Commander::UI).not_to have_received(:enable_paging)
+      end
+    end
   end
 
   describe 'with invalid options' do

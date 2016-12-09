@@ -134,6 +134,7 @@ module Commander
     #   :name            Program name, defaults to basename of executable
     #   :help_formatter  Defaults to Commander::HelpFormatter::Terminal
     #   :help            Allows addition of arbitrary global help blocks
+    #   :help_paging     Flag for toggling help paging
     #   :int_message     Message to display when interrupted (CTRL + C)
     #
 
@@ -147,7 +148,7 @@ module Commander
         @program[key] = block
       else
         unless args.empty?
-          @program[key] = (args.count == 1 && args[0]) || args
+          @program[key] = args.count == 1 ? args[0] : args
         end
         @program[key]
       end
@@ -283,6 +284,7 @@ module Commander
       {
         help_formatter: HelpFormatter::Terminal,
         name: File.basename($PROGRAM_NAME),
+        help_paging: true
       }
     end
 
@@ -297,7 +299,7 @@ module Commander
         c.example 'Display global help', 'command help'
         c.example "Display help for 'foo'", 'command help foo'
         c.when_called do |args, _options|
-          UI.enable_paging
+          UI.enable_paging if program(:help_paging)
           if args.empty?
             say help_formatter.render
           else
