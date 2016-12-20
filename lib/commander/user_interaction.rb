@@ -181,7 +181,7 @@ module Commander
           #{statement}
           end if
         end tell
-        ),
+        )
       ).strip.to_sym
     end
 
