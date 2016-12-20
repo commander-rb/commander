@@ -1,3 +1,7 @@
+=== 4.4.2 / 2016-12-20
+
+* Add `help_paging` program flag so that help paging may be disabled. (@gogiel)
+
 === 4.4.1 / 2016-12-02
 
 * Fix #36 - Warning about MissingSourceFile (@fallwith)
