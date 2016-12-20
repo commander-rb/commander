@@ -284,7 +284,7 @@ module Commander
       {
         help_formatter: HelpFormatter::Terminal,
         name: File.basename($PROGRAM_NAME),
-        help_paging: true
+        help_paging: true,
       }
     end
 
