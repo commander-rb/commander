@@ -1,3 +1,7 @@
+=== 4.4.3 / 2016-12-28
+
+* Fix deprecated constant warnings on Ruby 2.4.
+
 === 4.4.2 / 2016-12-20
 
 * Add `help_paging` program flag so that help paging may be disabled. (@gogiel)
