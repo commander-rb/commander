@@ -324,13 +324,14 @@ module Commander
     # Implements ask_for_CLASS methods.
 
     module AskForClass
+      DEPRECATED_CONSTANTS = [:Config, :TimeoutError, :MissingSourceFile, :NIL, :TRUE, :FALSE, :Fixnum, :Bignum].freeze
       # All special cases in HighLine::Question#convert, except those that implement #parse
       (
         [Float, Integer, String, Symbol, Regexp, Array, File, Pathname] +
         # All Classes that respond to #parse
-        Object.constants.map do |const|
-          # Ignore constants that trigger deprecation warnings
-          Object.const_get(const) unless [:Config, :TimeoutError, :MissingSourceFile].include?(const)
+        # Ignore constants that trigger deprecation warnings
+        (Object.constants - DEPRECATED_CONSTANTS).map do |const|
+          Object.const_get(const)
         end.select do |const|
           const.class == Class && const.respond_to?(:parse)
         end
