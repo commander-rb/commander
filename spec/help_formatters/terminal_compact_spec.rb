@@ -30,6 +30,73 @@ describe Commander::HelpFormatter::TerminalCompact do
     end
   end
 
+  describe 'global help with default_command' do
+    describe 'with command option' do
+      before :each do
+        new_command_runner 'help' do
+          program :help_formatter, :compact
+          command :'install gem' do |c|
+            c.syntax = 'foo install gem [options]'
+            c.summary = 'Install some gem'
+            c.option('--testing-command', 'Testing command')
+            c.option('--testing-command-second', 'Testing command second')
+          end
+          default_command :'install gem'
+        end.run!
+        @global_help = @output.string
+      end
+
+      describe 'should display' do
+        it 'the command name' do
+          expect(@global_help).to include('install gem')
+        end
+
+        it 'the summary' do
+          expect(@global_help).to include('Install some gem')
+        end
+
+        it 'the options label' do
+          expect(@global_help).to include('  Options')
+        end
+
+        it 'the command options' do
+          expect(@global_help).to include('--testing-command')
+          expect(@global_help).to include('--testing-command-second')
+        end
+      end
+    end
+
+    describe 'without command option' do
+      before :each do
+        new_command_runner 'help' do
+          program :help_formatter, :compact
+          command :'install gem' do |c|
+            c.syntax = 'foo install gem [options]'
+            c.summary = 'Install some gem'
+          end
+          default_command :'install gem'
+        end.run!
+        @global_help = @output.string
+      end
+
+      describe 'should display' do
+        it 'the command name' do
+          expect(@global_help).to include('install gem')
+        end
+
+        it 'the summary' do
+          expect(@global_help).to include('Install some gem')
+        end
+      end
+
+      describe 'should not display' do
+        it 'the options label' do
+          expect(@global_help).not_to include('  Options')
+        end
+      end
+    end
+  end
+
   describe 'command help' do
     before :each do
       new_command_runner 'help', 'install', 'gem' do
