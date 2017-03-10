@@ -26,6 +26,17 @@
         <%= option[:description] %>
 	<% end -%>
 <% end -%>
+<% unless @default_command.nil? -%>
+<% default_command = @commands.values.find { |command| command.name == @default_command.to_s } -%>
+<% unless default_command.nil? || default_command.options.empty? %>
+  <%= $terminal.color "OPTIONS", :bold %>:
+	<% for option in default_command.options -%>
+
+    <%= option[:switches].join ', ' %> 
+        <%= option[:description] %>
+	<% end -%>
+<% end -%>
+<% end -%>
 <% if program :help -%>
   <% for title, body in program(:help) %>
   <%= $terminal.color title.to_s.upcase, :bold %>:
