@@ -25,7 +25,7 @@
 <% end -%>
 <% end -%>
 <% unless default_command.nil? || default_command.options.empty? %>
-  Options:
+  <%= "Options for #{default_command.name}:" %>
 <% for option in default_command.options -%>
     <%= "%-20s %s" % [option[:switches].join(', '), option[:description]] %>
 <% end -%>

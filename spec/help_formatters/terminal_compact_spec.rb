@@ -66,7 +66,7 @@ describe Commander::HelpFormatter::TerminalCompact do
         end
 
         it 'the options label' do
-          expect(@global_help).to include('  Options')
+          expect(@global_help).to include('Options for install gem')
         end
 
         it 'the command options' do
@@ -105,7 +105,7 @@ describe Commander::HelpFormatter::TerminalCompact do
 
       describe 'should not display' do
         it 'the options label' do
-          expect(@global_help).not_to include('  Options')
+          expect(@global_help).not_to include('Options for install gem')
         end
       end
     end
