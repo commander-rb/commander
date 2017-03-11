@@ -27,6 +27,12 @@ describe Commander::HelpFormatter::Terminal do
         expect(@global_help).to include('Install some gem')
       end
     end
+
+    describe 'should not display' do
+      it 'the commands label with description for default_command' do
+        expect(@global_help).not_to include("COMMANDS\e[0m: (* default)")
+      end
+    end
   end
 
   describe 'global help with default_command' do
@@ -45,16 +51,20 @@ describe Commander::HelpFormatter::Terminal do
       end
 
       describe 'should display' do
+        it 'the commands label with description for default_command' do
+          expect(@global_help).to include("COMMANDS\e[0m: (* default)")
+        end
+
         it 'the command name' do
           expect(@global_help).to include('install gem')
         end
 
-        it 'the summary' do
-          expect(@global_help).to include('Install some gem')
+        it 'the summary with marked as default_command' do
+          expect(@global_help).to include('* Install some gem')
         end
 
         it 'the options label' do
-          expect(@global_help).to include('mOPTIONS')
+          expect(@global_help).to include('OPTIONS for install gem')
         end
 
         it 'the command options' do
@@ -77,18 +87,22 @@ describe Commander::HelpFormatter::Terminal do
       end
 
       describe 'should display' do
+        it 'the commands label with description for default_command' do
+          expect(@global_help).to include("COMMANDS\e[0m: (* default)")
+        end
+
         it 'the command name' do
           expect(@global_help).to include('install gem')
         end
 
         it 'the summary' do
-          expect(@global_help).to include('Install some gem')
+          expect(@global_help).to include('* Install some gem')
         end
       end
 
       describe 'should not display' do
         it 'the options label' do
-          expect(@global_help).not_to include('mOPTIONS')
+          expect(@global_help).not_to include('OPTIONS for install gem')
         end
       end
     end
