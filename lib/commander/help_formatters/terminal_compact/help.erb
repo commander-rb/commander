@@ -8,7 +8,8 @@
   Commands:
 <% for name, command in @commands.sort -%>
 <% unless alias? name -%>
-    <%= "%-#{max_command_length}s %s" % [command.name, command.summary || command.description] %>
+    <% summary_prefix = (!default_command.nil? && command.name == default_command.name)? '* ' : '  ' -%>
+    <%= "%-#{max_command_length}s #{summary_prefix}%s" % [command.name, command.summary || command.description] %>
 <% end -%>
 <% end -%>
 <% unless @aliases.empty? %>

@@ -51,8 +51,8 @@ describe Commander::HelpFormatter::TerminalCompact do
           expect(@global_help).to include('install gem')
         end
 
-        it 'the summary' do
-          expect(@global_help).to include('Install some gem')
+        it 'the summary with marked as default_command' do
+          expect(@global_help).to include('* Install some gem')
         end
 
         it 'the options label' do
@@ -85,7 +85,7 @@ describe Commander::HelpFormatter::TerminalCompact do
         end
 
         it 'the summary' do
-          expect(@global_help).to include('Install some gem')
+          expect(@global_help).to include('* Install some gem')
         end
       end
 
