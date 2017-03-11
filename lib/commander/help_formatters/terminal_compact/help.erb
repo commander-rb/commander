@@ -5,7 +5,7 @@
 
   <%= program :description %>
 
-  Commands:
+  <%= "Commands: %s" % [default_command.nil? ? '' : '(* default)'] %>
 <% for name, command in @commands.sort -%>
 <% unless alias? name -%>
     <% summary_prefix = (!default_command.nil? && command.name == default_command.name)? '* ' : '  ' -%>

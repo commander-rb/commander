@@ -28,6 +28,12 @@ describe Commander::HelpFormatter::TerminalCompact do
         expect(@global_help).to include('Install some gem')
       end
     end
+
+    describe 'should not display' do
+      it 'the commands label with description for default_command' do
+        expect(@global_help).not_to include('Commands: (* default)')
+      end
+    end
   end
 
   describe 'global help with default_command' do
@@ -47,6 +53,10 @@ describe Commander::HelpFormatter::TerminalCompact do
       end
 
       describe 'should display' do
+        it 'the commands label with description for default_command' do
+          expect(@global_help).to include('Commands: (* default)')
+        end
+
         it 'the command name' do
           expect(@global_help).to include('install gem')
         end
@@ -80,6 +90,10 @@ describe Commander::HelpFormatter::TerminalCompact do
       end
 
       describe 'should display' do
+        it 'the commands label with description for default_command' do
+          expect(@global_help).to include('Commands: (* default)')
+        end
+
         it 'the command name' do
           expect(@global_help).to include('install gem')
         end
