@@ -1,3 +1,6 @@
+<% unless @default_command.nil? -%>
+  <% default_command = @commands.values.find { |command| command.name == @default_command.to_s } -%>
+<% end -%>
   <%= program :name %>
 
   <%= program :description %>
@@ -20,13 +23,10 @@
     <%= "%-20s %s" % [option[:switches].join(', '), option[:description]] -%> 
 <% end -%>
 <% end -%>
-<% unless @default_command.nil? -%>
-<% default_command = @commands.values.find { |command| command.name == @default_command.to_s } -%>
 <% unless default_command.nil? || default_command.options.empty? %>
   Options:
 <% for option in default_command.options -%>
     <%= "%-20s %s" % [option[:switches].join(', '), option[:description]] %>
-<% end -%>
 <% end -%>
 <% end -%>
 <% if program :help -%>
