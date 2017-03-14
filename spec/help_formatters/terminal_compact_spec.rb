@@ -27,6 +27,10 @@ describe Commander::HelpFormatter::TerminalCompact do
       it 'the summary' do
         expect(@global_help).to include('Install some gem')
       end
+
+      it 'one space between command name and summary' do
+        expect(@global_help).to include('install gem Install some gem')
+      end
     end
 
     describe 'should not display' do
