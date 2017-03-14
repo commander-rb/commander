@@ -26,7 +26,7 @@
         <%= option[:description] %>
 	<% end -%>
 <% end -%>
-<% unless @default_command_options.empty? %>
+<% unless default_command_options.empty? %>
   <%= $terminal.color "OPTIONS for #{@default_command}", :bold %>:
 	<% for option in @default_command_options -%>
 

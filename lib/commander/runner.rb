@@ -203,7 +203,6 @@ module Commander
 
     def default_command(name)
       @default_command = name
-      default_command_options
     end
 
     ##
