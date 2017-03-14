@@ -119,7 +119,6 @@ describe Commander::HelpFormatter::TerminalCompact do
           end
         end
       end
-
     end
 
     describe 'without command option' do
