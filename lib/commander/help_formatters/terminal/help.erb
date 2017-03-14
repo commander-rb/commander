@@ -1,6 +1,3 @@
-<% unless @default_command.nil? -%>
-<% default_command = @commands.values.find { |command| command.name == @default_command.to_s } -%>
-<% end -%>
   <%= $terminal.color "NAME", :bold %>:
 
     <%= program :name %>
@@ -9,11 +6,10 @@
 
     <%= Commander::HelpFormatter.indent 4, program(:description) %>
 
-  <%= "%s: %s" % [$terminal.color("COMMANDS", :bold), default_command.nil? ? '' : '(* default)'] %>
+  <%= "#{$terminal.color "COMMANDS", :bold}:#{default_command_description}" %>
 <% for name, command in @commands.sort -%>
 	<% unless alias? name %>
-    <% summary_prefix = (!default_command.nil? && command.name == default_command.name)? '* ' : '  ' -%>
-    <%= "%-#{max_command_length}s #{summary_prefix}%s" % [command.name, command.summary || command.description] -%>
+    <%= "%-#{max_command_length}s #{summary_prefix(command.name)}%s" % [command.name, command.summary || command.description] -%>
 	<% end -%>
 <% end %>
 <% unless @aliases.empty? %>
@@ -30,9 +26,9 @@
         <%= option[:description] %>
 	<% end -%>
 <% end -%>
-<% unless default_command.nil? || default_command.options.empty? %>
-  <%= $terminal.color "OPTIONS for #{default_command.name}", :bold %>:
-	<% for option in default_command.options -%>
+<% unless @default_command_options.empty? %>
+  <%= $terminal.color "OPTIONS for #{@default_command}", :bold %>:
+	<% for option in @default_command_options -%>
 
     <%= option[:switches].join ', ' %> 
         <%= option[:description] %>
