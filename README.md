@@ -310,6 +310,64 @@ alias_command :update, :'install gem', 'rubygems', '--dest', 'some_path'
 $ foo update
 # => installing rubygems to some_path
 ```
+Invoking `foo --help` will now include an _Aliases:_ section.
+
+Aliases can also be used to support multi-word command names as indicated in the Features
+section above. The example below simulates a multi-word subcommand-style feature.   
+
+You wrote a simple database-driven project management application named `project`. It allows 
+creating a new project with initial tasks and provides for managing both project and tasks.
+You want to run commands like `project new foo` or `project task update`.
+
+The _task update_ command:
+```ruby
+command :'task update' do |c|
+  c.syntax = 'project task update'
+  c.action do |args, options|
+    # Process the update action
+  end
+end
+alias_command :'task update', :'task update'
+```
+
+Show help screen:
+```bash
+$ project --help
+
+Project Manager
+
+A simple command-line project manager
+
+Commands:                                                               
+  help        Display global or [command] help documentation          
+  new         Creates a new project                                  
+  .
+  .
+
+Aliases:                                                         
+  task update task update                                    
+  .
+  .
+  .
+```
+
+Create a new project named `foo`:
+```bash
+$ project new foo
+```
+
+Now, manage the tasks:
+```bash
+$ project task update
+```
+
+**Notes:**
+* Enclose the alias_command and command_name in quotes if either contain spaces.
+* If the alias_command matches the command_name in the alias_command invocation,
+  then the command_name will not be listed in the commands: section of the help screen.
+* If they do not match then, the command_name will appear in the commands: section 
+  of the help screen. This may cause the general usage screen to be confusing. Suggestion - 
+  hide the command_name when using aliasing!
 
 ### Command Defaults
 
