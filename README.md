@@ -313,13 +313,13 @@ $ foo update
 Invoking `foo --help` will now include an _Aliases:_ section.
 
 Aliases can also be used to support multi-word command names as indicated in the Features
-section above. The example below simulates a multi-word subcommand-style feature.   
+section above. The example scenerio below illustrates a multi-word subcommand-style feature.   
 
-You wrote a simple database-driven project management application named `project`. It allows 
-creating a new project with initial tasks and provides for managing both project and tasks.
-You want to run commands like `project new foo` or `project task update`.
+You are writing a simple database-driven project management application named `project` which allows
+for creating a new project with initial tasks, and provides for managing both project and tasks.
+You want to run commands like `project new foo` or `project task update foo`.
 
-The _task update_ command:
+The example _task update_ command:
 ```ruby
 command :'task update' do |c|
   c.syntax = 'project task update'
@@ -330,7 +330,7 @@ end
 alias_command :'task update', :'task update'
 ```
 
-Show help screen:
+The help screen shows the new alias:
 ```bash
 $ project --help
 
@@ -351,14 +351,14 @@ Aliases:
   .
 ```
 
-Create a new project named `foo`:
+To create a new project named `foo`:
 ```bash
 $ project new foo
 ```
 
-Now, manage the tasks:
+Now, manage the tasks for `foo`:
 ```bash
-$ project task update
+$ project task update foo
 ```
 
 **Notes:**
