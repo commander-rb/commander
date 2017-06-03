@@ -313,7 +313,7 @@ $ foo update
 Invoking `foo --help` will now include an _Aliases:_ section.
 
 Aliases can also be used to support multi-word command names as indicated in the Features
-section above. The example scenerio below illustrates a multi-word subcommand-style feature.   
+section above. The example scenerio below illustrates a multi-word sub-command-style feature.   
 
 You are writing a simple database-driven project management application named `project` which allows
 for creating a new project with initial tasks, and provides for managing both project and tasks.
@@ -368,6 +368,8 @@ $ project task update foo
 * If they do not match then, the command_name will appear in the commands: section 
   of the help screen. This may cause the general usage screen to be confusing. Suggestion - 
   hide the command_name when using aliasing!
+* While this is not sub-commands in the strictest sense, aliasing provides an 
+  excellant mechanism for organizing commands and groups of commands. Cookies...
 
 ### Command Defaults
 
