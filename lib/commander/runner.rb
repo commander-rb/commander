@@ -1,4 +1,5 @@
 require 'optparse'
+require 'commander/optparser_patch'
 
 module Commander
   class Runner
@@ -57,11 +58,11 @@ module Commander
         command(:help).run(*args)
         return
       end
-      global_option('-v', '--version', 'Display version information') do
+      global_option('--version', 'Display version information') do
         say version
         return
       end
-      global_option('-t', '--trace', 'Display backtrace when an error occurs') { trace = true } unless @never_trace || @always_trace
+      global_option('--trace', 'Display backtrace when an error occurs') { trace = true } unless @never_trace || @always_trace
       parse_global_options
       remove_global_options options, @args
       if trace
@@ -341,7 +342,7 @@ module Commander
 
         past_switch, arg_removed = false, false
         args.delete_if do |arg|
-          if switches.any? { |s| s[0, arg.length] == arg }
+          if switches.any? { |s| s == arg }
             arg_removed = !switch_has_arg
             past_switch = true
           elsif past_switch && !arg_removed && arg !~ /^-/

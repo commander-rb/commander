@@ -437,15 +437,8 @@ always_trace!
 
 ## Tips
 
-When adding a global or command option, OptionParser implicitly adds a small
-switch even when not explicitly created, for example `-c` will be the same as
-`--config` in both examples, however `-c` will only appear in the documentation
-when explicitly assigning it.
-
-```ruby
-global_option '-c', '--config FILE'
-global_option '--config FILE'
-```
+When adding a global or command option, `OptionParser` no longer implicitly adds a small
+switch unless explicitly stated.
 
 ## ASCII Tables
 
