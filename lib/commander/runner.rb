@@ -290,6 +290,12 @@ module Commander
     end
 
     ##
+    # Remove hidden commands. Used by the general help
+    def remove_hidden_commands
+      @commands.reject! { |k, v| !!v.hidden }
+    end
+
+    ##
     # Creates default commands such as 'help' which is
     # essentially the same as using the --help switch.
 
@@ -302,6 +308,7 @@ module Commander
         c.when_called do |args, _options|
           UI.enable_paging if program(:help_paging)
           if args.empty?
+            remove_hidden_commands
             say help_formatter.render
           else
             command = command args.join(' ')

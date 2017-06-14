@@ -3,7 +3,7 @@ require 'optparse'
 module Commander
   class Command
     attr_accessor :name, :examples, :syntax, :description
-    attr_accessor :summary, :proxy_options, :options
+    attr_accessor :summary, :proxy_options, :options, :hidden
 
     ##
     # Options struct.
