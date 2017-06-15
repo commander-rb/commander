@@ -9,10 +9,14 @@ module Commander
         @target = target
       end
 
-      def get_binding
-        @target.instance_eval { binding }.tap do |bind|
+      def get_binding(additional = {})
+        bnd = @target.instance_eval { binding }.tap do |bind|
           decorate_binding(bind)
         end
+        additional.each do |k, v|
+          bnd.local_variable_set(k, v)
+        end
+        bnd
       end
 
       # No-op, override in subclasses.

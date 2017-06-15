@@ -1,0 +1,16 @@
+
+  <%= cmd.name %>
+<% if cmd.syntax -%>
+
+  Usage: <%= cmd.syntax %>
+<% end -%>
+<% if cmd.description || cmd.summary -%>
+
+  <%= cmd.description || cmd.summary %>
+<% end -%>
+
+<% for name, command in @commands.sort -%>
+<% unless alias? name -%>
+    <%= "%-#{max_command_length}s %s" % [command.name, command.summary || command.description] %>
+<% end -%>
+<% end -%>

@@ -4,6 +4,7 @@ module Commander
   class Command
     attr_accessor :name, :examples, :syntax, :description
     attr_accessor :summary, :proxy_options, :options, :hidden
+    attr_reader :sub_command_help
 
     ##
     # Options struct.
@@ -141,6 +142,19 @@ module Commander
       @when_called = block ? [block] : args
     end
     alias action when_called
+
+    ##
+    # Handles displaying subcommand help. By default it will set the action to 
+    # display the subcommand if the action hasn't already been set
+
+    def sub_command_help=(value)
+      @sub_command_help = value
+      if @when_called.empty?
+        self.action {
+           exec("#{$0} #{ARGV.join(" ")} --help")
+        }
+      end
+    end
 
     ##
     # Run the command with _args_.

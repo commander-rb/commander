@@ -1,0 +1,24 @@
+
+  <%= $terminal.color "NAME", :bold %>:
+
+    <%= cmd.name %>
+<% if @syntax -%>
+
+  <%= $terminal.color "SYNOPSIS", :bold %>:
+
+    <%= cmd.syntax -%>
+
+<% end -%>
+
+  <%= $terminal.color "DESCRIPTION", :bold %>:
+
+    <%= Commander::HelpFormatter.indent 4, (cmd.description || cmd.summary || 'No description.') -%>
+
+
+  <%= $terminal.color "SUBCOMMANDS", :bold %>:
+<% for name, command in @commands.sort -%>
+  <% unless alias? name %>
+    <%= "%-#{max_command_length}s %s" % [command.name, command.summary || command.description] -%>
+  <% end -%>
+<% end %>
+
