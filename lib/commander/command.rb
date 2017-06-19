@@ -4,7 +4,10 @@ module Commander
   class Command
     attr_accessor :name, :examples, :syntax, :description
     attr_accessor :summary, :proxy_options, :options, :hidden
-    attr_reader :sub_command_help
+    attr_reader :sub_command_group
+
+    alias sub_command= hidden=
+    alias sub_command hidden
 
     ##
     # Options struct.
@@ -147,8 +150,8 @@ module Commander
     # Handles displaying subcommand help. By default it will set the action to 
     # display the subcommand if the action hasn't already been set
 
-    def sub_command_help=(value)
-      @sub_command_help = value
+    def sub_command_group=(value)
+      @sub_command_group = value
       if @when_called.empty?
         self.action {
            exec("#{$0} #{ARGV.join(" ")} --help")
