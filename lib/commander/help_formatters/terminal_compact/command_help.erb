@@ -21,7 +21,8 @@
 
   Options:
 <% for option in @options -%>
-    <%= "%-20s %s" % [option[:switches].join(', '), option[:description]] %> 
+    <%= "%-20s %s" % [option[:switches].join(', '), option[:description]] %><% if option[:default] %> <%= option[:default] %><% end %>
+  <% end -%> 
 <% end -%>
 <% end -%>
 

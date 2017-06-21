@@ -29,7 +29,8 @@
 	<% for option in @options -%>
 
     <%= option[:switches].join ', ' %> 
-        <%= Commander::HelpFormatter.indent 8, option[:description] %>
-	<% end -%>
+        <%= Commander::HelpFormatter.indent 8, option[:description] %><% if option[:default] %>
+        <%= $terminal.color "Default", :bold %>: <%= option[:default] %><% end %>
+  <% end -%>
 <% end -%>
 
