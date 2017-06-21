@@ -109,6 +109,15 @@ module Commander
     #
 
     def option(*args, &block)
+      default = nil
+      args.delete_if do |v|
+        if v.is_a?(Hash) && v.key?(:default)
+          default = v[:default]
+          true
+        else
+          false
+        end
+      end
       switches, description = Runner.separate_switches_from_description(*args)
       proc = block || option_proc(switches)
       @options << {
@@ -116,7 +125,7 @@ module Commander
         proc: proc,
         switches: switches,
         description: description,
-      }
+      }.tap { |h| h.merge!({ default: default }) unless default.nil? }
     end
 
     ##
@@ -178,10 +187,18 @@ module Commander
 
     def parse_options_and_call_procs(*args)
       return args if args.empty?
-      @options.each_with_object(OptionParser.new) do |option, opts|
+      opt = @options.each_with_object(OptionParser.new) do |option, opts|
         opts.on(*option[:args], &option[:proc])
         opts
-      end.parse! args
+      end
+      default_opt = @options.each_with_object([]) do |h, arr|
+        if h.key?(:default)
+          arr.push(h[:switches][0].split[0])
+          arr.push(h[:default].to_s)
+        end
+      end
+      opt.parse! default_opt
+      opt.parse! args
     end
 
     ##
