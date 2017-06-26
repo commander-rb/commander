@@ -186,7 +186,6 @@ module Commander
     # returning the arguments remaining.
 
     def parse_options_and_call_procs(*args)
-      return args if args.empty?
       opt = @options.each_with_object(OptionParser.new) do |option, opts|
         opts.on(*option[:args], &option[:proc])
         opts
