@@ -29,7 +29,8 @@ module Commander
     # supplying _args_ for mocking, or arbitrary usage.
 
     def initialize(args = ARGV)
-      @args, @commands, @aliases, @options = args, {}, {}, []
+      @args, @commands, @aliases, @options,
+        @default_command_options = args, {}, {}, [], []
       @help_formatter_aliases = help_formatter_alias_defaults
       @program = program_defaults
       @always_trace = false
@@ -202,6 +203,35 @@ module Commander
 
     def default_command(name)
       @default_command = name
+    end
+
+    ##
+    # Description about mark for default_command
+
+    def default_command_description
+      return ' (* default)' if @default_command
+      ''
+    end
+
+    ##
+    # Prefix for summary to identify default_command easily.
+
+    def summary_prefix(name)
+      return '' if @default_command.nil?
+      return '* ' if name == @default_command.to_s
+      '  '
+    end
+
+    ##
+    # Options of default_command.
+
+    def default_command_options
+      return [] if @commands.empty?
+
+      default_command = @commands.values.find { |command| command.name == @default_command.to_s }
+      return [] if default_command.nil?
+
+      @default_command_options = default_command.options
     end
 
     ##
