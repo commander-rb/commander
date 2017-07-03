@@ -1,6 +1,3 @@
-require 'optparse'
-require 'commander/optparser_patch'
-
 module Commander
   class Runner
     #--

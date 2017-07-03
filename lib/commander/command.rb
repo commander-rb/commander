@@ -1,4 +1,7 @@
 require 'optparse'
+require 'commander/option-parser-patches/implicit-short-tags'
+
+OptionParser.prepend Commander::OptionParserPatches::ImplicitShortTags
 
 module Commander
   class Command
