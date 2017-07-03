@@ -1,3 +1,5 @@
+# Patches the underling ruby OptionParser to prevent it from automatically
+# generating short tags for options
 module Commander
   module OptionParserPatches
     module ImplicitShortTags

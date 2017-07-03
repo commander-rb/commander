@@ -1,7 +1,9 @@
 require 'optparse'
 require 'commander/option-parser-patches/implicit-short-tags'
+require 'commander/option-parser-patches/decimal-integer'
 
 OptionParser.prepend Commander::OptionParserPatches::ImplicitShortTags
+OptionParser.prepend Commander::OptionParserPatches::DecimalInteger
 
 module Commander
   class Command
