@@ -15,14 +15,14 @@ module Commander
               opt.tr!('_', '-')
               begin
                 sw, = complete(:long, opt, true)
-              rescue ParseError
+              rescue ::OptionParser::ParseError
                 raise $!.set_option(arg, true)
               end
               begin
                 opt, cb, val = sw.parse(rest, argv) {|*exc| raise(*exc)}
                 val = cb.call(val) if cb
                 setter.call(sw.switch_name, val) if setter
-              rescue ParseError
+              rescue ::OptionParser::ParseError
                 raise $!.set_option(arg, rest)
               end
 
@@ -47,7 +47,7 @@ module Commander
                 argv.unshift(opt) if opt and (!rest or (opt = opt.sub(/\A-*/, '-')) != '-')
                 val = cb.call(val) if cb
                 setter.call(sw.switch_name, val) if setter
-              rescue ParseError
+              rescue ::OptionParser::ParseError
                 raise $!.set_option(arg, arg.length > 2)
               end
 
