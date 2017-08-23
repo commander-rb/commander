@@ -23,10 +23,10 @@ Style/NumericLiteralPrefix:
 Style/MethodMissing:
   Enabled: false
 
-Style/SpaceInsideStringInterpolation:
+Layout/SpaceInsideStringInterpolation:
   Enabled: false
 
-Style/MultilineOperationIndentation:
+Layout/MultilineOperationIndentation:
   Enabled: false
 
 Style/EmptyMethod:
