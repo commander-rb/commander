@@ -3,6 +3,10 @@ inherit_from: .rubocop_todo.yml
 AllCops:
   TargetRubyVersion: 1.9
 
+# not Ruby 1.9.3 compatible
+Style/PercentLiteralDelimiters:
+  Enabled: false
+
 # Offense count: 5
 Encoding:
   Enabled: false
