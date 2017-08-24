@@ -6,7 +6,7 @@
 # versions of RuboCop, may require this file to be generated again.
 
 # Offense count: 2
-Lint/Eval:
+Security/Eval:
   Enabled: false
 
 # Offense count: 2

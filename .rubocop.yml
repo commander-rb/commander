@@ -1,5 +1,12 @@
 inherit_from: .rubocop_todo.yml
 
+AllCops:
+  TargetRubyVersion: 1.9
+
+# not Ruby 1.9.3 compatible
+Style/PercentLiteralDelimiters:
+  Enabled: false
+
 # Offense count: 5
 Encoding:
   Enabled: false
@@ -23,10 +30,10 @@ Style/NumericLiteralPrefix:
 Style/MethodMissing:
   Enabled: false
 
-Style/SpaceInsideStringInterpolation:
+Layout/SpaceInsideStringInterpolation:
   Enabled: false
 
-Style/MultilineOperationIndentation:
+Layout/MultilineOperationIndentation:
   Enabled: false
 
 Style/EmptyMethod:
