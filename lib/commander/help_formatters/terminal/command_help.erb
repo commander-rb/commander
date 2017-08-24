@@ -14,6 +14,13 @@
 
     <%= Commander::HelpFormatter.indent 4, (@description || @summary || 'No description.') -%>
 
+<% if @explanation -%>
+
+  <%= $terminal.color "EXPLANATION", :bold %>:
+
+    <%= Commander::HelpFormatter.indent 4, (@explanation || 'No explanation.') -%>
+
+<% end -%>
 <% unless @examples.empty? -%>
 
   <%= $terminal.color "EXAMPLES", :bold %>:
@@ -28,8 +35,7 @@
   <%= $terminal.color "OPTIONS", :bold %>:
 	<% for option in @options -%>
 
-    <%= option[:switches].join ', ' %> 
+    <%= option[:switches].join ', ' %>
         <%= Commander::HelpFormatter.indent 8, option[:description] %>
 	<% end -%>
 <% end -%>
-

@@ -8,6 +8,10 @@
 
   <%= @description || @summary %>
 <% end -%>
+<% if @explanation -%>
+
+  <%= @explanation %>
+<% end -%>
 <% unless @examples.empty? -%>
 
   Examples:
@@ -21,7 +25,6 @@
 
   Options:
 <% for option in @options -%>
-    <%= "%-20s %s" % [option[:switches].join(', '), option[:description]] %> 
+    <%= "%-20s %s" % [option[:switches].join(', '), option[:description]] %>
 <% end -%>
 <% end -%>
-

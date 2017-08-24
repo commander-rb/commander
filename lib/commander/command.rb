@@ -2,7 +2,7 @@ require 'optparse'
 
 module Commander
   class Command
-    attr_accessor :name, :examples, :syntax, :description
+    attr_accessor :name, :examples, :syntax, :description, :explanation
     attr_accessor :summary, :proxy_options, :options
 
     ##

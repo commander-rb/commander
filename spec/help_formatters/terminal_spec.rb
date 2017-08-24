@@ -36,6 +36,7 @@ describe Commander::HelpFormatter::Terminal do
           c.syntax = 'foo install gem [options]'
           c.summary = 'Install some gem'
           c.description = 'Install some gem, blah blah blah'
+          c.explanation = 'This can go way further in describing'
           c.example 'one', 'two'
           c.example 'three', 'four'
         end
@@ -50,6 +51,10 @@ describe Commander::HelpFormatter::Terminal do
 
       it 'the description' do
         expect(@command_help).to include('Install some gem, blah blah blah')
+      end
+
+      it 'the explanation' do
+        expect(@command_help).to include('This can go way further in describing')
       end
 
       it 'all examples' do
