@@ -1,4 +1,4 @@
-[<img src="https://secure.travis-ci.org/commander-rb/commander.svg?branch=master" alt="Build Status" />](http://travis-ci.org/commander-rb/commander)
+[<img src="https://api.travis-ci.org/commander-rb/commander.svg" alt="Build Status" />](http://travis-ci.org/commander-rb/commander)
 [![Inline docs](http://inch-ci.org/github/commander-rb/commander.svg)](http://inch-ci.org/github/commander-rb/commander)
 
 # Commander
