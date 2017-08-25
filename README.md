@@ -339,6 +339,21 @@ $ foo install gem
 # => installing  to
 ```
 
+### Long descriptions
+
+If you need to have a long command description, keep your short description under `summary`, and consider multi-line strings for `description`:
+
+```ruby
+  program :summary, 'Stupid command that prints foo or bar.'
+  program :description, %q(
+#{c.summary}
+
+More information about that stupid command that prints foo or bar.
+
+And more
+  )
+```
+
 ### Additional Global Help
 
 Arbitrary help can be added using the following `#program` symbol:
