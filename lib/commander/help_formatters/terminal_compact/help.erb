@@ -2,10 +2,10 @@
 
   <%= program :description %>
 
-  Commands:
+  <%= "Commands:#{default_command_description}" %>
 <% for name, command in @commands.sort -%>
 <% unless alias? name -%>
-    <%= "%-#{max_command_length}s %s" % [command.name, command.summary || command.description] %>
+    <%= "%-#{max_command_length}s #{summary_prefix(command.name)}%s" % [command.name, command.summary || command.description] %>
 <% end -%>
 <% end -%>
 <% unless @aliases.empty? %>
@@ -18,6 +18,12 @@
   Global Options:
 <% for option in @options -%>
     <%= "%-20s %s" % [option[:switches].join(', '), option[:description]] -%> 
+<% end -%>
+<% end -%>
+<% unless default_command_options.empty? %>
+  <%= "Options for #{@default_command}:" %>
+<% for option in @default_command_options -%>
+    <%= "%-20s %s" % [option[:switches].join(', '), option[:description]] %>
 <% end -%>
 <% end -%>
 <% if program :help -%>
