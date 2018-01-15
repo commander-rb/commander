@@ -324,7 +324,7 @@ module Commander
     # Implements ask_for_CLASS methods.
 
     module AskForClass
-      DEPRECATED_CONSTANTS = [:Config, :TimeoutError, :MissingSourceFile, :NIL, :TRUE, :FALSE, :Fixnum, :Bignum].freeze
+      DEPRECATED_CONSTANTS = [:Config, :TimeoutError, :MissingSourceFile, :NIL, :TRUE, :FALSE, :Fixnum, :Bignum, :Data].freeze
       # All special cases in HighLine::Question#convert, except those that implement #parse
       (
         [Float, Integer, String, Symbol, Regexp, Array, File, Pathname] +
