@@ -27,6 +27,6 @@ Gem::Specification.new do |s|
     s.add_development_dependency('rubocop', '~> 0.41.1')
     s.add_development_dependency('json', '< 2.0')
   else
-    s.add_development_dependency('rubocop', '~> 0.46')
+    s.add_development_dependency('rubocop', '~> 0.49.1')
   end
 end
