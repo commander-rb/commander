@@ -325,20 +325,43 @@ module Commander
 
     module AskForClass
       DEPRECATED_CONSTANTS = [:Config, :TimeoutError, :MissingSourceFile, :NIL, :TRUE, :FALSE, :Fixnum, :Bignum, :Data].freeze
-      # All special cases in HighLine::Question#convert, except those that implement #parse
-      (
-        [Float, Integer, String, Symbol, Regexp, Array, File, Pathname] +
-        # All Classes that respond to #parse
-        # Ignore constants that trigger deprecation warnings
-        (Object.constants - DEPRECATED_CONSTANTS).map do |const|
-          Object.const_get(const)
-        end.select do |const|
-          const.class == Class && const.respond_to?(:parse)
-        end
-      ).each do |klass|
+
+      # define methods for common classes
+      [Float, Integer, String, Symbol, Regexp, Array, File, Pathname].each do |klass|
         define_method "ask_for_#{klass.to_s.downcase}" do |prompt|
           $terminal.ask(prompt, klass)
         end
+      end
+
+      def method_missing(method_name, *arguments, &block)
+        if method_name.to_s =~ /^ask_for_(.*)/
+          if arguments.count != 1
+            fail ArgumentError, "wrong number of arguments (given #{arguments.count}, expected 1)"
+          end
+          prompt = arguments.first
+          requested_class = Regexp.last_match[1]
+
+          # All Classes that respond to #parse
+          # Ignore constants that trigger deprecation warnings
+          available_classes = (Object.constants - DEPRECATED_CONSTANTS).map do |const|
+            Object.const_get(const)
+          end.select do |const|
+            const.class == Class && const.respond_to?(:parse)
+          end
+
+          klass = available_classes.find { |k| k.to_s.downcase == requested_class }
+          if klass
+            $terminal.ask(prompt, klass)
+          else
+            super
+          end
+        else
+          super
+        end
+      end
+
+      def respond_to_missing?(method_name, include_private = false)
+        method_name.to_s.start_with?('ask_for_') || super
       end
     end
 
