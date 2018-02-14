@@ -100,7 +100,7 @@ module Commander
     end
 
     def suppress_trace_class?(klass)
-      (@suppress_trace_classes || []).include? klass
+      (@suppress_trace_classes || []).any? { |c| klass <= c }
     end
 
     ##

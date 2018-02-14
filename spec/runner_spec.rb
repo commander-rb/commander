@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+class InheritedRuntimeError < RuntimeError; end
+
 describe Commander do
   include Commander::Methods
 
@@ -361,11 +363,19 @@ describe Commander do
       msg
     end
 
-    context 'with an error that is suppressed' do
+    shared_examples 'suppresses --trace' do |klass|
       it 'should not display the --trace in the message' do
-        msg = suppress_runtime_error_and_raise RuntimeError
+        msg = suppress_runtime_error_and_raise klass
         expect(msg).not_to match(/--trace/)
       end
+    end
+
+    context 'with an error that is suppressed' do
+      include_examples 'suppresses --trace', RuntimeError
+    end
+
+    context 'with an error that inherits from a suppressed class' do
+      include_examples 'suppresses --trace', InheritedRuntimeError
     end
 
     context 'with an error that is not suppressed' do
