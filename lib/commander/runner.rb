@@ -95,12 +95,13 @@ module Commander
     # Suppresses the --trace message for these classes
     # However --trace will still display the backtrace if included
 
-    def suppress_trace_class(*classes)
-      @suppress_trace_class = classes
+    def suppress_trace_class(klass)
+      @suppress_trace_class = klass
     end
 
     def suppress_trace_class?(klass)
-      (@suppress_trace_class || []).any? { |c| klass <= c }
+      return unless @suppress_trace_class
+      klass <= @suppress_trace_class
     end
 
     ##
