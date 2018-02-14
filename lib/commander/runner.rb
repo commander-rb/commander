@@ -75,7 +75,7 @@ module Commander
           OptionParser::MissingArgument => e
           abort e.to_s
         rescue => e
-          if @never_trace
+          if @never_trace || suppress_trace_class?(e.class)
             abort "error: #{e}."
           else
             abort "error: #{e}. Use --trace to view backtrace"
@@ -95,7 +95,12 @@ module Commander
     # Suppresses the --trace message for these classes
     # However --trace will still display the backtrace if included
 
-    def suppress_trace_message(*error_classes)
+    def suppress_trace_classes(*classes)
+      @suppress_trace_classes = classes
+    end
+
+    def suppress_trace_class?(klass)
+      (@suppress_trace_classes || []).include? klass
     end
 
     ##

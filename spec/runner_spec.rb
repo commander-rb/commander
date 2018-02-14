@@ -351,7 +351,7 @@ describe Commander do
       msg = nil
       begin
         new_command_runner 'foo' do
-          suppress_trace_message RuntimeError
+          suppress_trace_classes RuntimeError
           command(:foo) { |c| c.when_called { raise error_type } }
         end.run!
       rescue SystemExit => e
