@@ -10,7 +10,7 @@ module Commander
       default_command
       always_trace!
       never_trace!
-      suppress_trace_classes
+      suppress_trace_class
     ).each do |meth|
       eval <<-END, binding, __FILE__, __LINE__
         def #{meth}(*args, &block)
