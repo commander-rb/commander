@@ -346,6 +346,36 @@ describe Commander do
     end
   end
 
+  describe '#suppress_trace_message' do
+    def suppress_runtime_error_and_raise(error_type)
+      msg = nil
+      begin
+        new_command_runner 'foo' do
+          suppress_trace_message RuntimeError
+          command(:foo) { |c| c.when_called { raise error_type } }
+        end.run!
+      rescue SystemExit => e
+        msg = e.message
+      end
+      expect(msg).to match(/error:/)
+      msg
+    end
+
+    context 'with an error that is suppressed' do
+      it 'should not display the --trace in the message' do
+        msg = suppress_runtime_error_and_raise RuntimeError
+        expect(msg).not_to match(/--trace/)
+      end
+    end
+
+    context 'with an error that is not suppressed' do
+      it 'should display the --trace in the message' do
+        msg = suppress_runtime_error_and_raise StandardError
+        expect(msg).to match(/--trace/)
+      end
+    end
+  end
+
   describe '#always_trace!' do
     it 'should enable tracing globally, regardless of whether --trace was passed or not' do
       expect do

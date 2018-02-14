@@ -92,6 +92,13 @@ module Commander
     end
 
     ##
+    # Suppresses the --trace message for these classes
+    # However --trace will still display the backtrace if included
+
+    def suppress_trace_message(*error_classes)
+    end
+
+    ##
     # Enable tracing on all executions (bypasses --trace)
 
     def always_trace!
