@@ -1,7 +1,7 @@
 # Patches the underling ruby OptionParser to prevent it from automatically
 # generating short tags for options
 module Commander
-  module OptionParserPatches
+  module Patches
     module ImplicitShortTags
       def parse_in_order(argv = default_argv, setter = nil, &nonopt)  # :nodoc:
         opt, arg, val, rest = nil

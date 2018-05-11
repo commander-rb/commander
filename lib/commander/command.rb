@@ -1,12 +1,15 @@
 require 'optparse'
-require 'commander/option-parser-patches/implicit-short-tags'
-require 'commander/option-parser-patches/decimal-integer'
+require 'commander/patches/implicit-short-tags'
+require 'commander/patches/decimal-integer'
+require 'commander/patches/validate_inputs'
 
-OptionParser.prepend Commander::OptionParserPatches::ImplicitShortTags
-OptionParser.prepend Commander::OptionParserPatches::DecimalInteger
+OptionParser.prepend Commander::Patches::ImplicitShortTags
+OptionParser.prepend Commander::Patches::DecimalInteger
 
 module Commander
   class Command
+    prepend Patches::ValidateInputs
+
     attr_accessor :name, :examples, :syntax, :description
     attr_accessor :summary, :proxy_options, :options, :hidden
     attr_reader :sub_command_group
