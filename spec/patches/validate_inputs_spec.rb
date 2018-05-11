@@ -43,54 +43,6 @@ RSpec.describe Commander::Patches::ValidateInputs do
   end
 
   describe '#call' do
-    describe 'syntax validating' do
-      it 'raises if first word is not CLI name' do
-        command :test do |c|
-          c.syntax = 'not_metal test [options]'
-        end
-
-        expect do
-          command(:test).call
-        end.to raise_error(Commander::Patches::CommandDefinitionError)
-      end
-
-      it 'raises if second word is not command name' do
-        command :test do |c|
-          c.syntax = 'metal not_test [options]'
-        end
-
-        expect do
-          command(:test).call
-        end.to raise_error(Commander::Patches::CommandDefinitionError)
-      end
-
-      it 'raises if last word is not [options]' do
-        command :test do |c|
-          c.syntax = 'metal test [not_options]'
-        end
-
-        expect do
-          command(:test).call
-        end.to raise_error(Commander::Patches::CommandDefinitionError)
-      end
-
-      describe 'when multi-word command' do
-        it 'raises if corresponding syntax words do not form command name' do
-          command :'test do' do |c|
-            c.syntax = 'metal test not_do [options]'
-          end
-
-          expect do
-            command(:'test do').call
-          end.to raise_error(
-            Commander::Patches::CommandDefinitionError
-          ).with_message(
-            "Command name(s) should come after CLI name e.g. 'test do'"
-          )
-        end
-      end
-    end
-
     describe 'validating passed arguments against syntax' do
       it 'raises if too many arguments given' do
         expect do
