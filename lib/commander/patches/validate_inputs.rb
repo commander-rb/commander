@@ -19,6 +19,7 @@ module Commander
 
       def call(args = [])
         return super unless PatchEnabled
+        return super if syntax_parts[0..1] == ['commander', 'help']
 
         # Use defined syntax to validate how many args this command can be
         # passed.

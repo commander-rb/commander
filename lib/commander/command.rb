@@ -171,7 +171,7 @@ module Commander
       @sub_command_group = value
       if @when_called.empty?
         self.action {
-           exec("#{$0} #{ARGV.join(" ")} --help")
+          exec("#{$0} #{ARGV.join(" ")} --help")
         }
       end
     end
