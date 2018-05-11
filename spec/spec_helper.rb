@@ -24,6 +24,7 @@ end
 # Create test command for usage within several specs
 
 def create_test_command
+  stub_const('Commander::Patches::ValidateInputs::PatchEnabled', false)
   command :test do |c|
     c.syntax = 'test [options] <file>'
     c.description = 'test description'

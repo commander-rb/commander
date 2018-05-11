@@ -7,6 +7,10 @@ module Commander
     class CommandUsageError < StandardError; end
 
     module ValidateInputs
+      # This is used to switch the Patch off during the original test of
+      # Commander. It is VERY MUCH a hack but it works
+      PatchEnabled = true
+
       def run(*args)
         super(*args)
       rescue CommandUsageError => error
@@ -14,6 +18,8 @@ module Commander
       end
 
       def call(args = [])
+        return super unless PatchEnabled
+
         # Use defined syntax to validate how many args this command can be
         # passed.
         validate_correct_number_of_args!(args)
