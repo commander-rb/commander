@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'commander/extensions'
+require 'commander/patches/validate_inputs'
 
 # These specs inspired by those in Commander gem in `spec/runner_spec.rb`.
 
