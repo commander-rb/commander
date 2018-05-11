@@ -4,7 +4,7 @@ require 'commander/patches/validate_inputs'
 
 # These specs inspired by those in Commander gem in `spec/runner_spec.rb`.
 
-RSpec.describe Commander::Extensions do
+RSpec.describe Commander::Patches::ValidateInputs do
   include Commander::Delegates
 
   def mock_terminal
@@ -51,7 +51,7 @@ RSpec.describe Commander::Extensions do
 
         expect do
           command(:test).call
-        end.to raise_error(Commander::Extensions::CommandDefinitionError)
+        end.to raise_error(Commander::Patches::CommandDefinitionError)
       end
 
       it 'raises if second word is not command name' do
@@ -61,7 +61,7 @@ RSpec.describe Commander::Extensions do
 
         expect do
           command(:test).call
-        end.to raise_error(Commander::Extensions::CommandDefinitionError)
+        end.to raise_error(Commander::Patches::CommandDefinitionError)
       end
 
       it 'raises if last word is not [options]' do
@@ -71,7 +71,7 @@ RSpec.describe Commander::Extensions do
 
         expect do
           command(:test).call
-        end.to raise_error(Commander::Extensions::CommandDefinitionError)
+        end.to raise_error(Commander::Patches::CommandDefinitionError)
       end
 
       describe 'when multi-word command' do
@@ -83,7 +83,7 @@ RSpec.describe Commander::Extensions do
           expect do
             command(:'test do').call
           end.to raise_error(
-            Commander::Extensions::CommandDefinitionError
+            Commander::Patches::CommandDefinitionError
           ).with_message(
             "Command name(s) should come after CLI name e.g. 'test do'"
           )
@@ -95,13 +95,13 @@ RSpec.describe Commander::Extensions do
       it 'raises if too many arguments given' do
         expect do
           command(:test).call(['one', 'two', 'three', 'four'])
-        end.to raise_error(Commander::Extensions::CommandUsageError)
+        end.to raise_error(Commander::Patches::CommandUsageError)
       end
 
       it 'raises if too few arguments given' do
         expect do
           command(:test).call(['one'])
-        end.to raise_error(Commander::Extensions::CommandUsageError)
+        end.to raise_error(Commander::Patches::CommandUsageError)
       end
 
       it 'proceeds as normal if valid number of arguments given' do
@@ -118,7 +118,7 @@ RSpec.describe Commander::Extensions do
         it 'raises if too few arguments given' do
           expect do
             command(:'test do').call
-          end.to raise_error(Commander::Extensions::CommandUsageError)
+          end.to raise_error(Commander::Patches::CommandUsageError)
         end
 
         it 'proceeds as normal if valid number of arguments given' do

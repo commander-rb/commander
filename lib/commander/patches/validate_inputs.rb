@@ -3,7 +3,7 @@
 require 'commander'
 
 module Commander
-  module Extensions
+  module Patches
     # An error in the definition of a command, which we cannot recover from and
     # should be fixed in the code.
     class CommandDefinitionError < StandardError; end
@@ -12,7 +12,7 @@ module Commander
     # message should be shown along with command usage info.
     class CommandUsageError < StandardError; end
 
-    module Command
+    module ValidateInputs
       def run(*args)
         super(*args)
       rescue CommandUsageError => error
