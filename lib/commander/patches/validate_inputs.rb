@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'commander'
-
 module Commander
   module Patches
     # An error in the definition of a command, which we cannot recover from and
