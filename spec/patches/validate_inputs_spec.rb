@@ -7,13 +7,13 @@ require 'commander/patches/validate_inputs'
 RSpec.describe Commander::Patches::ValidateInputs do
   include Commander::Delegates
 
-  def mock_terminal
+  def mock_patch_terminal
     @input = StringIO.new
     @output = StringIO.new
     $terminal = HighLine.new @input, @output
   end
 
-  def create_test_command
+  def create_test_patch_command
     command :test do |c|
       c.syntax = 'metal test ARG1 ARG2 [OPTIONAL_ARG3] [options]'
       c.description = 'test description'
@@ -38,8 +38,8 @@ RSpec.describe Commander::Patches::ValidateInputs do
 
   before do
     $stderr = StringIO.new
-    mock_terminal
-    create_test_command
+    mock_patch_terminal
+    create_test_patch_command
   end
 
   describe '#call' do
