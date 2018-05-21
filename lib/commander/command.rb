@@ -171,9 +171,13 @@ module Commander
     # Call the commands when_called block with _args_.
 
     def call(args = [])
-      object = @when_called.shift
-      meth = @when_called.shift || :call
+      object, meth = @when_called[0, 2]
+      meth ||= :call
       options = proxy_option_struct
+
+      # empty the proxy option stack before the next invocation
+      proxy_options.clear
+
       case object
       when Proc then object.call(args, options)
       when Class then meth != :call ? object.new.send(meth, args, options) : object.new(args, options)
