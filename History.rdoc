@@ -1,3 +1,7 @@
+=== 4.4.5 / 2018-05-22
+
+* Make internal command state less mutable. (@doriantaylor)
+
 === 4.4.4 / 2018-01-18
 
 * Fix deprecated constant warnings on Ruby 2.5. (@mattbrictson)
