@@ -74,6 +74,16 @@ describe Commander::Command do
       it 'should raise an error when no handler is present' do
         expect { @command.when_called }.to raise_error(ArgumentError)
       end
+
+      it 'should be able to be run more than once' do
+        expect(@command.run('once')).to eql('test once')
+        expect(@command.run('twice')).to eql('test twice')
+      end
+
+      it 'should empty @proxy_options after running' do
+        expect(@command.run('--verbose')).to eql('test ')
+        expect(@command.proxy_options.empty?).to be true
+      end
     end
 
     describe 'should populate options with' do
