@@ -80,9 +80,11 @@ describe Commander::Command do
         expect(@command.run('twice')).to eql('test twice')
       end
 
-      it 'should empty @proxy_options after running' do
+      it 'should not accumulate entries in @proxy_options when run twice' do
         expect(@command.run('--verbose')).to eql('test ')
-        expect(@command.proxy_options.empty?).to be true
+        expect(@command.proxy_options).to eq([[:verbose, true]])
+        expect(@command.run('foo')).to eql('test foo')
+        expect(@command.proxy_options).to eq([])
       end
     end
 

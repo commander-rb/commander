@@ -161,6 +161,9 @@ module Commander
 
     def parse_options_and_call_procs(*args)
       return args if args.empty?
+      # empty proxy_options before populating via OptionParser
+      # prevents duplication of options if the command is run twice
+      proxy_options.clear
       @options.each_with_object(OptionParser.new) do |option, opts|
         opts.on(*option[:args], &option[:proc])
         opts
@@ -174,9 +177,6 @@ module Commander
       object, meth = @when_called[0, 2]
       meth ||= :call
       options = proxy_option_struct
-
-      # empty the proxy option stack before the next invocation
-      proxy_options.clear
 
       case object
       when Proc then object.call(args, options)
