@@ -84,6 +84,13 @@ describe Commander::Command do
         expect(@command.run('--verbose')).to eql('test ')
         expect(@command.proxy_options.empty?).to be true
       end
+
+      it 'should memoize proxy_option_struct' do
+        expect(@command.run('--verbose')).to eql('test ')
+        expect(@command.proxy_option_struct.verbose).to be true
+        expect(@command.run('lol wut')).to eql('test lol wut')
+        expect(@command.proxy_option_struct.verbose).to be nil
+      end
     end
 
     describe 'should populate options with' do
