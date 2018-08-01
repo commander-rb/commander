@@ -38,6 +38,7 @@ module Commander
     def initialize(name)
       @name, @examples, @when_called = name.to_s, [], []
       @options, @proxy_options = [], []
+      @proxy_option_struct = nil # this is handled separately
     end
 
     ##
@@ -176,11 +177,15 @@ module Commander
     def call(args = [])
       object, meth = @when_called[0, 2]
       meth ||= :call
+
+      # nuke any memoized instance of this thing before running it again
+      @proxy_option_struct = nil
       options = proxy_option_struct
 
       case object
       when Proc then object.call(args, options)
-      when Class then meth != :call ? object.new.send(meth, args, options) : object.new(args, options)
+      when Class then meth != :call ? object.new.send(meth, args, options) :
+          object.new(args, options)
       else object.send(meth, args, options) if object
       end
     end
@@ -190,7 +195,8 @@ module Commander
     # collected by the #option_proc.
 
     def proxy_option_struct
-      proxy_options.each_with_object(Options.new) do |(option, value), options|
+      return @proxy_option_struct unless @proxy_option_struct.nil?
+      @proxy_option_struct = proxy_options.each_with_object(Options.new) do |(option, value), options|
         # options that are present will evaluate to true
         value = true if value.nil?
         options.__send__ :"#{option}=", value
