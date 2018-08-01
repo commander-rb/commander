@@ -1,3 +1,7 @@
+=== 4.4.6 / 2018-07-31
+
+* Fix unexpected internal behavior change introduced in 4.4.5.
+
 === 4.4.5 / 2018-05-22
 
 * Make internal command state less mutable. (@doriantaylor)
