@@ -66,7 +66,7 @@ module Commander
 
     def say_ok(*args)
       args.each do |arg|
-        say $terminal.color(arg, :green)
+        say HighLine.default_instance.color(arg, :green)
       end
     end
 
@@ -80,7 +80,7 @@ module Commander
 
     def say_warning(*args)
       args.each do |arg|
-        say $terminal.color(arg, :yellow)
+        say HighLine.default_instance.color(arg, :yellow)
       end
     end
 
@@ -94,7 +94,7 @@ module Commander
 
     def say_error(*args)
       args.each do |arg|
-        say $terminal.color(arg, :red)
+        say HighLine.default_instance.color(arg, :red)
       end
     end
 
@@ -113,7 +113,7 @@ module Commander
     #   * highligh: on_<color>
 
     def color(*args)
-      say $terminal.color(*args)
+      say HighLine.default_instance.color(*args)
     end
 
     ##
@@ -329,7 +329,7 @@ module Commander
       # define methods for common classes
       [Float, Integer, String, Symbol, Regexp, Array, File, Pathname].each do |klass|
         define_method "ask_for_#{klass.to_s.downcase}" do |prompt|
-          $terminal.ask(prompt, klass)
+          HighLine.default_instance.ask(prompt, klass)
         end
       end
 
@@ -351,7 +351,7 @@ module Commander
 
           klass = available_classes.find { |k| k.to_s.downcase == requested_class }
           if klass
-            $terminal.ask(prompt, klass)
+            HighLine.default_instance.ask(prompt, klass)
           else
             super
           end
@@ -509,9 +509,9 @@ module Commander
         return if finished?
         erase_line
         if completed?
-          $terminal.say UI.replace_tokens(@complete_message, generate_tokens) if @complete_message.is_a? String
+          HighLine.default_instance.say UI.replace_tokens(@complete_message, generate_tokens) if @complete_message.is_a? String
         else
-          $terminal.say UI.replace_tokens(@format, generate_tokens) << ' '
+          HighLine.default_instance.say UI.replace_tokens(@format, generate_tokens) << ' '
         end
       end
 
@@ -544,7 +544,7 @@ module Commander
 
       def erase_line
         # highline does not expose the output stream
-        $terminal.instance_variable_get('@output').print "\r\e[K"
+        HighLine.default_instance.instance_variable_get('@output').print "\r\e[K"
       end
     end
   end

@@ -448,7 +448,7 @@ module Commander
     end
 
     def say(*args) #:nodoc:
-      $terminal.say(*args)
+      HighLine.default_instance.say(*args)
     end
   end
 end

@@ -16,12 +16,12 @@ describe Commander::Methods do
 
       before do
         allow(terminal).to receive(:ask)
-        $_old_terminal = $terminal
-        $terminal = terminal
+        @old_highline = HighLine.default_instance
+        HighLine.default_instance = terminal
       end
 
       after do
-        $terminal = $_old_terminal
+        HighLine.default_instance = @old_highline
       end
 
       subject do
