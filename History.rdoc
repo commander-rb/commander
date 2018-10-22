@@ -1,3 +1,7 @@
+=== 4.4.7 / 2018-10-22
+
+* Update HighLine dependency to 2.0.0. (@rohitpaulk)
+
 === 4.4.6 / 2018-07-31
 
 * Fix unexpected internal behavior change introduced in 4.4.5.
