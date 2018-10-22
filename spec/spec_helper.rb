@@ -18,7 +18,7 @@ require 'commander/methods'
 def mock_terminal
   @input = StringIO.new
   @output = StringIO.new
-  $terminal = HighLine.new @input, @output
+  HighLine.default_instance = HighLine.new(@input, @output)
 end
 
 # Create test command for usage within several specs

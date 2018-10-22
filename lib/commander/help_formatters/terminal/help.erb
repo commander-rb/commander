@@ -1,34 +1,34 @@
-  <%= $terminal.color "NAME", :bold %>:
+  <%= HighLine.default_instance.color "NAME", :bold %>:
 
     <%= program :name %>
 
-  <%= $terminal.color "DESCRIPTION", :bold %>:
+  <%= HighLine.default_instance.color "DESCRIPTION", :bold %>:
 
     <%= Commander::HelpFormatter.indent 4, program(:description) %>
 
-  <%= $terminal.color "COMMANDS", :bold %>:
+  <%= HighLine.default_instance.color "COMMANDS", :bold %>:
 <% for name, command in @commands.sort -%>
 	<% unless alias? name %>
     <%= "%-#{max_command_length}s %s" % [command.name, command.summary || command.description] -%>
 	<% end -%>
 <% end %>
 <% unless @aliases.empty? %>
-  <%= $terminal.color "ALIASES", :bold %>:
+  <%= HighLine.default_instance.color "ALIASES", :bold %>:
   <% for alias_name, args in @aliases.sort %>
     <%= "%-#{max_aliases_length}s %s %s" % [alias_name, command(alias_name).name, args.join(' ')] -%>
   <% end %>
 <% end %>
 <% unless @options.empty? -%>
-  <%= $terminal.color "GLOBAL OPTIONS", :bold %>:
+  <%= HighLine.default_instance.color "GLOBAL OPTIONS", :bold %>:
 	<% for option in @options -%>
 
-    <%= option[:switches].join ', ' %> 
+    <%= option[:switches].join ', ' %>
         <%= option[:description] %>
 	<% end -%>
 <% end -%>
 <% if program :help -%>
   <% for title, body in program(:help) %>
-  <%= $terminal.color title.to_s.upcase, :bold %>:
+  <%= HighLine.default_instance.color title.to_s.upcase, :bold %>:
 
     <%= body %>
   <% end -%>
