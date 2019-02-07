@@ -2,6 +2,7 @@ require 'optparse'
 require 'commander/patches/implicit-short-tags'
 require 'commander/patches/decimal-integer'
 require 'commander/patches/validate_inputs'
+require 'commander/patches/option_defaults'
 
 OptionParser.prepend Commander::Patches::ImplicitShortTags
 OptionParser.prepend Commander::Patches::DecimalInteger
@@ -116,16 +117,9 @@ module Commander
     #   c.option '--date [DATE]', Date
     #
 
+    # NOTE: This method is being patched to handle defaults differently
+    prepend Patches::OptionDefaults
     def option(*args, &block)
-      default = nil
-      args.delete_if do |v|
-        if v.is_a?(Hash) && v.key?(:default)
-          default = v[:default]
-          true
-        else
-          false
-        end
-      end
       switches, description = Runner.separate_switches_from_description(*args)
       proc = block || option_proc(switches)
       @options << {
@@ -133,7 +127,7 @@ module Commander
         proc: proc,
         switches: switches,
         description: description,
-      }.tap { |h| h.merge!({ default: default }) unless default.nil? }
+      }
     end
 
     ##
