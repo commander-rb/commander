@@ -381,6 +381,30 @@ describe Commander do
     end
   end
 
+  describe '#silent_trace!' do
+    it 'should allow the --trace option' do
+      expect do
+        new_command_runner 'help', '--trace' do
+          silent_trace!
+        end.run!
+      end.not_to raise_error
+    end
+
+    it 'should not prompt to use --trace switch on errors' do
+      msg = nil
+      begin
+        new_command_runner 'foo' do
+          silent_trace!
+          command(:foo) { |c| c.when_called { fail 'cookies!' } }
+        end.run!
+      rescue SystemExit => e
+        msg = e.message
+      end
+      expect(msg).to match(/error: cookies!/)
+      expect(msg).not_to match(/--trace/)
+    end
+  end
+
   context 'conflict between #always_trace! and #never_trace!' do
     it 'respects the last used command' do
       expect do

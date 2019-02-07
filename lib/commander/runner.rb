@@ -34,6 +34,7 @@ module Commander
       @program = program_defaults
       @always_trace = false
       @never_trace = false
+      @silent_trace = false
       create_default_commands
     end
 
@@ -77,7 +78,7 @@ module Commander
           OptionParser::MissingArgument => e
           abort e.to_s
         rescue => e
-          if @never_trace
+          if @never_trace || @silent_trace
             abort "error: #{e}."
           else
             abort "error: #{e}. Use --trace to view backtrace"
@@ -99,14 +100,25 @@ module Commander
     def always_trace!
       @always_trace = true
       @never_trace = false
+      @silent_trace = false
     end
 
     ##
     # Hide the trace option from the help menus and don't add it as a global option
 
     def never_trace!
-      @never_trace = true
       @always_trace = false
+      @never_trace = true
+      @silent_trace = false
+    end
+
+    ##
+    # Includes the trace option in the help but not in the error message
+
+    def silent_trace!
+      @always_trace = false
+      @never_trace = false
+      @silent_trace = true
     end
 
     ##
