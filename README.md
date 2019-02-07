@@ -435,6 +435,12 @@ Or make it always on:
 always_trace!
 ```
 
+Include the `--trace` global option but turn off the error message prompt:
+
+```ruby
+silent_trace!
+```
+
 ## Tips
 
 When adding a global or command option, `OptionParser` no longer implicitly adds a small
