@@ -15,7 +15,7 @@ Lint/HandleExceptions:
 
 # Offense count: 5
 Metrics/AbcSize:
-  Max: 29
+  Max: 30
 
 # Offense count: 1
 # Configuration parameters: CountComments.
