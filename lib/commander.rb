@@ -21,7 +21,8 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 
-require 'highline/import'
+require 'highline'
+$terminal = HighLine.new
 require 'commander/version'
 require 'commander/blank'
 require 'commander/user_interaction'
