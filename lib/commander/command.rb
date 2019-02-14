@@ -3,6 +3,7 @@ require 'commander/patches/implicit-short-tags'
 require 'commander/patches/decimal-integer'
 require 'commander/patches/validate_inputs'
 require 'commander/patches/option_defaults'
+require 'commander/patches/help_formatter_binding'
 
 OptionParser.prepend Commander::Patches::ImplicitShortTags
 OptionParser.prepend Commander::Patches::DecimalInteger
