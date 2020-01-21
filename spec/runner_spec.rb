@@ -643,4 +643,18 @@ describe Commander do
       end.run!
     end
   end
+
+  describe 'with double dash' do
+    it 'should interpret the remainder as arguments' do
+      new_command_runner 'foo', '--', '-x' do
+        command('foo') do |c|
+          c.option '-x', 'Switch'
+          c.when_called do |args, options|
+            expect(args).to eq(%w(-x))
+            expect(options.x).to be_nil
+          end
+        end
+      end.run!
+    end
+  end
 end

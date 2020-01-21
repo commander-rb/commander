@@ -328,7 +328,6 @@ module Commander
     # again for the command.
 
     def remove_global_options(options, args)
-      # TODO: refactor with flipflop, please TJ ! have time to refactor me !
       options.each do |option|
         switches = option[:switches].dup
         next if switches.empty?
@@ -341,6 +340,7 @@ module Commander
 
         past_switch, arg_removed = false, false
         args.delete_if do |arg|
+          break if arg == '--'
           if switches.any? { |s| s[0, arg.length] == arg }
             arg_removed = !switch_has_arg
             past_switch = true
