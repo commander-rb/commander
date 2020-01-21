@@ -1,3 +1,8 @@
+=== 4.5.0 / 2020-01-21
+
+* Drop support for Ruby < 2.3.
+* Fix bug parsing double dash (#75).
+
 === 4.4.7 / 2018-10-22
 
 * Update HighLine dependency to 2.0.0. (@rohitpaulk)
