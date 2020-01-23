@@ -34,7 +34,7 @@ module Commander
     rescue LoadError
       # Do nothing
     else
-      Libnotify.icon_dirs << "/usr/share/icons/gnome/*/"
+      Libnotify.icon_dirs << '/usr/share/icons/gnome/*/'
       module GrowlLibnotify
         # Growl offers a simple api for macos desktop notifications.
         # It is included by default by commander.
@@ -52,37 +52,37 @@ module Commander
 
         def notify_info(msg)
           Libnotify.new do |notify|
-            notify.summary = "info"
+            notify.summary = 'info'
             notify.body = msg
             notify.transient = true 
-            notify.icon_path = "info"
+            notify.icon_path = 'info'
           end.show!
         end
 
         def notify_ok(msg)
           Libnotify.new do |notify|
-            notify.summary = "ok"
+            notify.summary = 'ok'
             notify.body = msg
             notify.transient = true
-            notify.icon_path = "sunny"
+            notify.icon_path = 'sunny'
           end.show!
         end
 
         def notify_warning(msg)
           Libnotify.new do |notify|
-            notify.summary = "warning"
+            notify.summary = 'warning'
             notify.body = msg
             notify.transient = true
-            notify.icon_path = "important"
+            notify.icon_path = 'important'
           end.show!
         end
 
         def notify_error(msg)
           Libnotify.new do |notify|
-            notify.summary = "error"
+            notify.summary = 'error'
             notify.body = msg
             notify.transient = true
-            notify.icon_path = "error"
+            notify.icon_path = 'error'
           end.show!
         end
 
