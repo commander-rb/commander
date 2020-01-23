@@ -24,7 +24,6 @@ module Commander
       include Growl
     end
 
-
     #--
     # Mimic growl in linux with libnotify
     #++
@@ -54,7 +53,7 @@ module Commander
           Libnotify.new do |notify|
             notify.summary = 'info'
             notify.body = msg
-            notify.transient = true 
+            notify.transient = true
             notify.icon_path = 'info'
           end.show!
         end
@@ -85,11 +84,9 @@ module Commander
             notify.icon_path = 'error'
           end.show!
         end
-
       end
       include GrowlLibnotify
     end
-
 
     ##
     # Ask the user for a password. Specify a custom
