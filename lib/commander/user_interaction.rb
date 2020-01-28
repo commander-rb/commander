@@ -43,13 +43,13 @@ module Commander
         # https://github.com/splattael/libnotify
 
         { 
-          nil => nil, 
-          info: 'info', 
-          ok: 'sunny', 
-          warning: 'important', 
-          error: 'error' 
+          nil => nil,
+          info: 'info',
+          ok: 'sunny',
+          warning: 'important',
+          error: 'error',
         }.each_pair do |status, icon|
-          define_method ['notify',status].compact.join('_') do |message, *args|
+          define_method ['notify', status].compact.join('_') do |message, *_args|
             Libnotify.new do |notify|
               notify.summary = message unless status.nil?
               notify.body = message
