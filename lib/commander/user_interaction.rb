@@ -42,7 +42,7 @@ module Commander
 
         # https://github.com/splattael/libnotify
 
-        { 
+        {
           nil => nil,
           info: 'info',
           ok: 'sunny',
