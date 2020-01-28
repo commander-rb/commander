@@ -42,47 +42,21 @@ module Commander
 
         # https://github.com/splattael/libnotify
 
-        def notify(msg)
-          Libnotify.new do |notify|
-            notify.summary = msg
-            notify.transient = true
-          end.show!
-        end
-
-        def notify_info(msg)
-          Libnotify.new do |notify|
-            notify.summary = 'info'
-            notify.body = msg
-            notify.transient = true
-            notify.icon_path = 'info'
-          end.show!
-        end
-
-        def notify_ok(msg)
-          Libnotify.new do |notify|
-            notify.summary = 'ok'
-            notify.body = msg
-            notify.transient = true
-            notify.icon_path = 'sunny'
-          end.show!
-        end
-
-        def notify_warning(msg)
-          Libnotify.new do |notify|
-            notify.summary = 'warning'
-            notify.body = msg
-            notify.transient = true
-            notify.icon_path = 'important'
-          end.show!
-        end
-
-        def notify_error(msg)
-          Libnotify.new do |notify|
-            notify.summary = 'error'
-            notify.body = msg
-            notify.transient = true
-            notify.icon_path = 'error'
-          end.show!
+        { 
+          nil => nil, 
+          info: 'info', 
+          ok: 'sunny', 
+          warning: 'important', 
+          error: 'error' 
+        }.each_pair do |status, icon|
+          define_method ['notify',status].compact.join('_') do |message, *args|
+            Libnotify.new do |notify|
+              notify.summary = message unless status.nil?
+              notify.body = message
+              notify.transient = true
+              notify.icon_path = icon
+            end.show!
+          end
         end
       end
       include GrowlLibnotify
