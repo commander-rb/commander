@@ -240,15 +240,19 @@ else
 end
 ```
 
-## Growl Notifications
+## Desktop Notifications
 
-Commander provides methods for displaying Growl notifications. To use these
-methods you need to install http://github.com/tj/growl which utilizes
-the [growlnotify](http://growl.info/extras.php#growlnotify) executable. Note that
-growl is auto-imported by Commander when available, no need to require.
+Commander provides methods for displaying desktop notifications. 
+
+To use these methods you need to install either of these gems, depending on your operating system.
+* [growl](http://github.com/tj/growl) gem in macOS
+  which uses the [growlnotify](http://growl.info/extras.php#growlnotify) executable. 
+* [libnotify](https://rubygems.org/gems/libnotify) gem in linux
+
+Note that following methods are auto-imported by Commander when available, no need to require.
 
 ```ruby
-# Display a generic Growl notification
+# Display a generic notification
 notify 'Something happened'
 
 # Display an 'info' status notification
