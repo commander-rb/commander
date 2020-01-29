@@ -245,9 +245,9 @@ end
 Commander provides methods for displaying desktop notifications. 
 
 To use these methods you need to install either of these gems, depending on your operating system.
-* [growl](http://github.com/tj/growl) gem in macOS
+* [growl](http://github.com/tj/growl) gem on macOS
   which uses the [growlnotify](http://growl.info/extras.php#growlnotify) executable. 
-* [libnotify](https://rubygems.org/gems/libnotify) gem in linux
+* [libnotify](https://rubygems.org/gems/libnotify) gem on linux.
 
 Note that following methods are auto-imported by Commander when available, no need to require.
 
