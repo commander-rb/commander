@@ -63,11 +63,10 @@ module Commander
 
         private
 
-        def desktop_notification(msg, icon=nil)
+        def desktop_notification(msg, icon = nil)
           icon = nil unless GROWL_LIB_NOTIFY_ICONS_ENABLED
           Libnotify.show(summary: msg, icon_path: icon, transient: true)
         end
-
       end
       include GrowlLibnotify
     end
