@@ -33,31 +33,41 @@ module Commander
     rescue LoadError
       # Do nothing
     else
-      Libnotify.icon_dirs << '/usr/share/icons/gnome/*/'
       module GrowlLibnotify
-        # Growl offers a simple api for macos desktop notifications.
-        # It is included by default by commander.
-        #
-        # This mimics that api using libnotify for linux desktop notifications.
-
+        # Growl offers a simple api for desktop notifications.
+        # This mimics that on linux using libnotify.
         # https://github.com/splattael/libnotify
 
-        {
-          nil => nil,
-          info: 'info',
-          ok: 'sunny',
-          warning: 'important',
-          error: 'error',
-        }.each_pair do |status, icon|
-          define_method ['notify', status].compact.join('_') do |message, *_args|
-            Libnotify.new do |notify|
-              notify.summary = message unless status.nil?
-              notify.body = message
-              notify.transient = true
-              notify.icon_path = icon
-            end.show!
-          end
+        GROWL_LIB_NOTIFY_ICONS_ENABLED = File.exist? '/usr/share/icons/gnome/'
+        Libnotify.icon_dirs << '/usr/share/icons/gnome/*/' if GROWL_LIB_NOTIFY_ICONS_ENABLED
+
+        def notify(msg)
+          desktop_notification(msg)
         end
+
+        def notify_info(msg)
+          desktop_notification(msg, 'info')
+        end
+
+        def notify_ok(msg)
+          desktop_notification(msg, 'sunny')
+        end
+
+        def notify_warning(msg)
+          desktop_notification(msg, 'important')
+        end
+
+        def notify_error(msg)
+          desktop_notification(msg, 'error')
+        end
+
+        private
+
+        def desktop_notification(msg, icon=nil)
+          icon = nil unless GROWL_LIB_NOTIFY_ICONS_ENABLED
+          Libnotify.show(summary: msg, icon_path: icon, transient: true)
+        end
+
       end
       include GrowlLibnotify
     end
