@@ -24,6 +24,53 @@ module Commander
       include Growl
     end
 
+    #--
+    # Mimic growl in linux with libnotify
+    #++
+
+    begin
+      require 'libnotify'
+    rescue LoadError
+      # Do nothing
+    else
+      module GrowlLibnotify
+        # Growl offers a simple api for desktop notifications.
+        # This mimics that on linux using libnotify.
+        # https://github.com/splattael/libnotify
+
+        GROWL_LIB_NOTIFY_ICONS_ENABLED = File.exist? '/usr/share/icons/gnome/'
+        Libnotify.icon_dirs << '/usr/share/icons/gnome/*/' if GROWL_LIB_NOTIFY_ICONS_ENABLED
+
+        def notify(msg)
+          desktop_notification(msg)
+        end
+
+        def notify_info(msg)
+          desktop_notification(msg, 'info')
+        end
+
+        def notify_ok(msg)
+          desktop_notification(msg, 'sunny')
+        end
+
+        def notify_warning(msg)
+          desktop_notification(msg, 'important')
+        end
+
+        def notify_error(msg)
+          desktop_notification(msg, 'error')
+        end
+
+        private
+
+        def desktop_notification(msg, icon = nil)
+          icon = nil unless GROWL_LIB_NOTIFY_ICONS_ENABLED
+          Libnotify.show(summary: msg, icon_path: icon, transient: true)
+        end
+      end
+      include GrowlLibnotify
+    end
+
     ##
     # Ask the user for a password. Specify a custom
     # _message_ other than 'Password: ' or override the
