@@ -1,5 +1,5 @@
-[<img src="https://api.travis-ci.org/commander-rb/commander.svg" alt="Build Status" />](http://travis-ci.org/commander-rb/commander)
-[![Inline docs](http://inch-ci.org/github/commander-rb/commander.svg)](http://inch-ci.org/github/commander-rb/commander)
+[<img src="https://api.travis-ci.org/commander-rb/commander.svg" alt="Build Status" />](https://travis-ci.org/commander-rb/commander)
+[![Inline docs](https://inch-ci.org/github/commander-rb/commander.svg)](https://inch-ci.org/github/commander-rb/commander)
 
 # Commander
 
@@ -243,8 +243,8 @@ end
 ## Growl Notifications
 
 Commander provides methods for displaying Growl notifications. To use these
-methods you need to install http://github.com/tj/growl which utilizes
-the [growlnotify](http://growl.info/extras.php#growlnotify) executable. Note that
+methods you need to install https://github.com/tj/growl which utilizes
+the [growlnotify](https://growl.info/extras.php#growlnotify) executable. Note that
 growl is auto-imported by Commander when available, no need to require.
 
 ```ruby
@@ -449,7 +449,7 @@ global_option '--config FILE'
 
 ## ASCII Tables
 
-For feature rich ASCII tables for your terminal app check out the terminal-table gem at http://github.com/tj/terminal-table
+For feature rich ASCII tables for your terminal app check out the terminal-table gem at https://github.com/tj/terminal-table
 
     +----------+-------+----+--------+-----------------------+
     | Terminal | Table | Is | Wicked | Awesome               |
@@ -468,7 +468,7 @@ OR
 ## Contrib
 
 Feel free to fork and request a pull, or submit a ticket
-http://github.com/commander-rb/commander/issues
+https://github.com/commander-rb/commander/issues
 
 ## License
 
