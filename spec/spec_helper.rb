@@ -14,11 +14,20 @@ require 'commander'
 require 'commander/methods'
 
 # Mock terminal IO streams so we can spec against them
-
 def mock_terminal
   @input = StringIO.new
   @output = StringIO.new
   HighLine.default_instance = HighLine.new(@input, @output)
+end
+
+# Stub Kernel.abort
+TestSystemExit = Class.new(RuntimeError)
+module Commander
+  class Runner
+    def abort(message)
+      fail TestSystemExit, message
+    end
+  end
 end
 
 # Create test command for usage within several specs

@@ -334,7 +334,7 @@ describe Commander do
         new_command_runner 'foo' do
           command(:foo) { |c| c.when_called { fail 'cookies!' } }
         end.run!
-      end.to raise_error(SystemExit, /error: cookies!. Use --trace/)
+      end.to raise_error(TestSystemExit, /error: cookies!. Use --trace/)
     end
 
     it 'should display callstack when using this switch' do
@@ -363,7 +363,7 @@ describe Commander do
         new_command_runner 'help', '--trace' do
           never_trace!
         end.run!
-      end.to raise_error(SystemExit, /invalid option: --trace/)
+      end.to raise_error(TestSystemExit, /invalid option: --trace/)
     end
 
     it 'should not prompt to use --trace switch on errors' do
@@ -373,7 +373,7 @@ describe Commander do
           never_trace!
           command(:foo) { |c| c.when_called { fail 'cookies!' } }
         end.run!
-      rescue SystemExit => e
+      rescue TestSystemExit => e
         msg = e.message
       end
       expect(msg).to match(/error: cookies!/)
@@ -430,7 +430,7 @@ describe Commander do
     it 'should output an invalid option message' do
       expect do
         run('test', '--invalid-option')
-      end.to raise_error(SystemExit, /invalid option: --invalid-option/)
+      end.to raise_error(TestSystemExit, /invalid option: --invalid-option/)
     end
   end
 
@@ -438,7 +438,7 @@ describe Commander do
     it 'should output an invalid command message' do
       expect do
         run('foo')
-      end.to raise_error(SystemExit, /invalid command. Use --help for more information/)
+      end.to raise_error(TestSystemExit, /invalid command. Use --help for more information/)
     end
   end
 
@@ -446,7 +446,7 @@ describe Commander do
     it 'should output an invalid command message' do
       expect do
         run('help', 'does_not_exist')
-      end.to raise_error(SystemExit, /invalid command. Use --help for more information/)
+      end.to raise_error(TestSystemExit, /invalid command. Use --help for more information/)
     end
   end
 
@@ -454,7 +454,7 @@ describe Commander do
     it 'should output an invalid command message' do
       expect do
         run('--help', 'does_not_exist')
-      end.to raise_error(SystemExit, /invalid command. Use --help for more information/)
+      end.to raise_error(TestSystemExit, /invalid command. Use --help for more information/)
     end
   end
 
@@ -462,7 +462,7 @@ describe Commander do
     it 'should output an invalid option message' do
       expect do
         run('--help', 'test', '--invalid-option')
-      end.to raise_error(SystemExit, /invalid option: --invalid-option/)
+      end.to raise_error(TestSystemExit, /invalid option: --invalid-option/)
     end
   end
 
