@@ -4,6 +4,7 @@ module Commander
   class Command
     attr_accessor :name, :examples, :syntax, :description
     attr_accessor :summary, :proxy_options, :options
+    attr_reader :global_options
 
     ##
     # Options struct.
@@ -38,6 +39,7 @@ module Commander
     def initialize(name)
       @name, @examples, @when_called = name.to_s, [], []
       @options, @proxy_options = [], []
+      @global_options = []
     end
 
     ##
@@ -190,7 +192,7 @@ module Commander
     # collected by the #option_proc.
 
     def proxy_option_struct
-      proxy_options.each_with_object(Options.new) do |(option, value), options|
+      (global_options + proxy_options).each_with_object(Options.new) do |(option, value), options|
         # options that are present will evaluate to true
         value = true if value.nil?
         options.__send__ :"#{option}=", value

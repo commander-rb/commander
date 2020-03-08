@@ -395,7 +395,7 @@ module Commander
     def global_option_proc(switches, &block)
       lambda do |value|
         unless active_command.nil?
-          active_command.proxy_options << [Runner.switch_to_sym(switches.last), value]
+          active_command.global_options << [Runner.switch_to_sym(switches.last), value]
         end
         yield value if block && !value.nil?
       end
