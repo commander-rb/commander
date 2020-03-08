@@ -132,6 +132,40 @@ describe Commander do
       end.run!
       expect(quiet).to be false
     end
+
+    it 'should allow command arguments before the global option' do
+      config = nil
+      args = nil
+      new_command_runner 'foo', '--config', 'config-value', 'arg1', 'arg2' do
+        global_option('-c', '--config CONFIG', String)
+        command :foo do |c|
+          c.when_called do |arguments, options|
+            options.default(config: 'default')
+            args = arguments
+            config = options.config
+          end
+        end
+      end.run!
+      expect(config).to eq('config-value')
+      expect(args).to eq(%w(arg1 arg2))
+    end
+
+    it 'should allow command arguments after the global option' do
+      config = nil
+      args = nil
+      new_command_runner 'foo', 'arg1', 'arg2', '--config', 'config-value' do
+        global_option('-c', '--config CONFIG', String)
+        command :foo do |c|
+          c.when_called do |arguments, options|
+            options.default(config: 'default')
+            args = arguments
+            config = options.config
+          end
+        end
+      end.run!
+      expect(config).to eq('config-value')
+      expect(args).to eq(%w(arg1 arg2))
+    end
   end
 
   describe '#parse_global_options' do
