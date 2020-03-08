@@ -164,6 +164,33 @@ describe Commander::Command do
         end
         @command.run '--interval', '15'
       end
+
+      describe 'given a global option' do
+        before do
+          @command.global_options << [:global_option, 'gvalue']
+        end
+
+        describe 'and no command specific arguments' do
+          it 'provides the global option to the command action' do
+            @command.when_called { |_, options| expect(options.global_option).to eq('gvalue') }
+            @command.run
+          end
+        end
+
+        describe 'and a command specific option' do
+          it 'provides the global option to the command action' do
+            @command.when_called { |_, options| expect(options.global_option).to eq('gvalue') }
+            @command.run '--verbose'
+          end
+        end
+
+        describe 'and a command specific argument' do
+          it 'provides the global option to the command action' do
+            @command.when_called { |_, options| expect(options.global_option).to eq('gvalue') }
+            @command.run 'argument'
+          end
+        end
+      end
     end
   end
 end
