@@ -332,19 +332,28 @@ module Commander
       options.each do |option|
         switches = option[:switches]
         next if switches.empty?
-        switch_has_arg = switches.any? { |s| s =~ /[ =]/ }
+        option_takes_argument = switches.any? { |s| s =~ /[ =]/ }
         switches = expand_optionally_negative_switches(switches)
 
-        past_switch, arg_removed = false, false
-        args.delete_if do |arg|
-          break if arg == '--'
-          if switches.any? { |s| s[0, arg.length] == arg }
-            arg_removed = !switch_has_arg
-            past_switch = true
-          elsif past_switch && !arg_removed && arg !~ /^-/
-            arg_removed = true
+        option_argument_needs_removal = false
+        args.delete_if do |token|
+          break if token == '--'
+
+          # Use just the portion of the token before the = when
+          # comparing switches.
+          index_of_equals = token.index('=') if option_takes_argument
+          token = token[0, index_of_equals] if index_of_equals
+          token_contains_option_argument = !index_of_equals.nil?
+
+          if switches.any? { |s| s[0, token.length] == token }
+            option_argument_needs_removal =
+              option_takes_argument && !token_contains_option_argument
+            true
+          elsif option_argument_needs_removal && token !~ /^-/
+            option_argument_needs_removal = false
+            true
           else
-            arg_removed = true
+            option_argument_needs_removal = false
             false
           end
         end
