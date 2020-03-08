@@ -246,6 +246,7 @@ module Commander
     # Returns array of valid command names found within _args_.
 
     def valid_command_names_from(*args)
+      remove_global_options options, args
       arg_string = args.delete_if { |value| value =~ /^-/ }.join ' '
       commands.keys.find_all { |name| name if arg_string =~ /^#{name}\b/ }
     end
