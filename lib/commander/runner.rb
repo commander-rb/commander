@@ -330,13 +330,9 @@ module Commander
 
     def remove_global_options(options, args)
       options.each do |option|
-        switches = option[:switches].dup
+        switches = option[:switches]
         next if switches.empty?
-
-        if (switch_has_arg = switches.any? { |s| s =~ /[ =]/ })
-          switches.map! { |s| s[0, s.index('=') || s.index(' ') || s.length] }
-        end
-
+        switch_has_arg = switches.any? { |s| s =~ /[ =]/ }
         switches = expand_optionally_negative_switches(switches)
 
         past_switch, arg_removed = false, false
