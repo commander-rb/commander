@@ -100,6 +100,17 @@ describe Commander do
       expect(quiet).to be true
     end
 
+    it 'should be inherited by commands when provided before the command name' do
+      option = nil
+      new_command_runner '--global-option', 'option-value', 'command_name' do
+        global_option('--global-option=GLOBAL', 'A global option')
+        command :command_name do |c|
+          c.when_called { |_, options| option = options.global_option }
+        end
+      end.run!
+      expect(option).to eq('option-value')
+    end
+
     it 'should be inherited by commands even when a block is present' do
       quiet = nil
       new_command_runner 'foo', '--quiet' do
@@ -526,6 +537,13 @@ describe Commander do
   describe '#command_name_from_args' do
     it 'should locate command within arbitrary arguments passed' do
       new_command_runner '--help', '--arbitrary', 'test'
+      expect(command_runner.command_name_from_args).to eq('test')
+    end
+
+    it 'should locate command when provided after a global argument with value' do
+      new_command_runner '--global-option', 'option-value', 'test' do
+        global_option('--global-option=GLOBAL', 'A global option')
+      end
       expect(command_runner.command_name_from_args).to eq('test')
     end
 
