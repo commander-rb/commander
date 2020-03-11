@@ -12,7 +12,11 @@ module Commander
       end
 
       def template(name)
-        ERB.new(File.read(File.join(File.dirname(__FILE__), 'terminal', "#{name}.erb")), nil, '-')
+        if RUBY_VERSION < '2.6'
+          ERB.new(File.read(File.join(File.dirname(__FILE__), 'terminal', "#{name}.erb")), nil, '-')
+        else
+          ERB.new(File.read(File.join(File.dirname(__FILE__), 'terminal', "#{name}.erb")), trim_mode: '-')
+        end
       end
     end
   end
