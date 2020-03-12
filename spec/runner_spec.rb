@@ -177,6 +177,23 @@ describe Commander do
       expect(config).to eq('config-value')
       expect(args).to eq(%w(arg1 arg2))
     end
+
+    it 'allows global options in the form option=value' do
+      config = nil
+      args = nil
+      new_command_runner 'test', 'arg1', '--config=config-value', 'arg2' do
+        global_option('-c', '--config CONFIG', String)
+        command :test do |c|
+          c.when_called do |arguments, options|
+            options.default(config: 'default')
+            args = arguments
+            config = options.config
+          end
+        end
+      end.run!
+      expect(config).to eq('config-value')
+      expect(args).to eq(%w[arg1 arg2])
+    end
   end
 
   describe '#parse_global_options' do
@@ -370,6 +387,20 @@ describe Commander do
       args << '--versionCode' << 'something'
       command_runner.remove_global_options options, args
       expect(args).to eq(%w(--versionCode something))
+    end
+
+    it 'should remove specified switches value provided via equals' do
+      options = [{ switches: ['--global GLOBAL'] }]
+      args = ['--command', '--global=option-value', 'arg']
+      command_runner.remove_global_options options, args
+      expect(args).to eq(['--command', 'arg'])
+    end
+
+    it 'should not remove extra values after switches' do
+      options = [{ switches: ['--global GLOBAL'] }]
+      args = ['--global', '--command', 'arg']
+      command_runner.remove_global_options options, args
+      expect(args).to eq(['--command', 'arg'])
     end
   end
 
