@@ -237,9 +237,18 @@ module Commander
     ##
     # Attempts to locate a command name from within the arguments.
     # Supports multi-word commands, using the largest possible match.
+    # Returns the default command, if no valid commands found in the args.
 
     def command_name_from_args
-      @__command_name_from_args ||= (valid_command_names_from(*@args.dup).sort.last || @default_command)
+      @__command_name_from_args ||= (longest_valid_command_name_from(@args) || @default_command)
+    end
+
+    ##
+    # Attempts to locate a command name from within the provided arguments.
+    # Supports multi-word commands, using the largest possible match.
+
+    private def longest_valid_command_name_from(args)
+      valid_command_names_from(*args.dup).max
     end
 
     ##
@@ -304,7 +313,7 @@ module Commander
           if args.empty?
             say help_formatter.render
           else
-            command = command args.join(' ')
+            command = command(longest_valid_command_name_from(args))
             begin
               require_valid_command command
             rescue InvalidCommandError => e

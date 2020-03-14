@@ -484,6 +484,22 @@ describe Commander do
       expect(run('test', '--help')).to eq("Implement help for test here\n")
     end
 
+    it 'can be used after the command and command arguments' do
+      expect(run('test', 'command-arg', '--help')).to eq("Implement help for test here\n")
+    end
+
+    it 'can be used before a single-word command with command arguments' do
+      expect(run('help', 'test', 'command-arg')).to eq("Implement help for test here\n")
+    end
+
+    it 'can be used before a multi-word command with command arguments' do
+      expect(
+        run('help', 'module', 'install', 'command-arg') do
+          command('module install') { |c| c.when_called { say 'whee!' } }
+        end
+      ).to eq("Implement help for module install here\n")
+    end
+
     describe 'help_paging program information' do
       it 'enables paging when enabled' do
         run('--help') { program :help_paging, true }
