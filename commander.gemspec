@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
   s.require_paths = ['lib']
 
   s.add_runtime_dependency('highline', '~> 2.0.0')
+  s.add_runtime_dependency('sorted_set', '~> 1.0.3')
 
   s.add_development_dependency('rspec', '~> 3.2')
   s.add_development_dependency('rake')
