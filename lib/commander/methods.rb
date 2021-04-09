@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Commander
   module Methods
     include Commander::UI

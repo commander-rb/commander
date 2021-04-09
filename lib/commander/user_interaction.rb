@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'tempfile'
 require 'shellwords'
 
@@ -218,18 +220,14 @@ module Commander
     #
 
     def io(input = nil, output = nil, &block)
+      orig_stdin, orig_stdout = $stdin, $stdout
       $stdin = File.new(input) if input
       $stdout = File.new(output, 'r+') if output
       return unless block
+
       yield
+      $stdin, $stdout = orig_stdin, orig_stdout
       reset_io
-    end
-
-    ##
-    # Reset IO to initial constant streams.
-
-    def reset_io
-      $stdin, $stdout = STDIN, STDOUT
     end
 
     ##
@@ -274,6 +272,7 @@ module Commander
     def enable_paging
       return unless $stdout.tty?
       return unless Process.respond_to? :fork
+
       read, write = IO.pipe
 
       # Kernel.fork is not supported on all platforms and configurations.
@@ -324,7 +323,7 @@ module Commander
     # Implements ask_for_CLASS methods.
 
     module AskForClass
-      DEPRECATED_CONSTANTS = [:Config, :TimeoutError, :MissingSourceFile, :NIL, :TRUE, :FALSE, :Fixnum, :Bignum, :Data].freeze
+      DEPRECATED_CONSTANTS = %i[Config TimeoutError MissingSourceFile NIL TRUE FALSE Fixnum Bignum Data].freeze
 
       # define methods for common classes
       [Float, Integer, String, Symbol, Regexp, Array, File, Pathname].each do |klass|
@@ -338,6 +337,7 @@ module Commander
           if arguments.count != 1
             fail ArgumentError, "wrong number of arguments (given #{arguments.count}, expected 1)"
           end
+
           prompt = arguments.first
           requested_class = Regexp.last_match[1]
 
@@ -351,7 +351,7 @@ module Commander
               # The `SortedSet` class has been extracted from the `set` library.
             end
           end.compact.select do |const|
-            const.class == Class && const.respond_to?(:parse)
+            const.instance_of?(Class) && const.respond_to?(:parse)
           end
 
           klass = available_classes.find { |k| k.to_s.downcase == requested_class }
@@ -503,7 +503,7 @@ module Commander
           steps_remaining: steps_remaining,
           total_steps: @total_steps,
           time_elapsed: format('%0.2fs', time_elapsed),
-          time_remaining: @step > 0 ? format('%0.2fs', time_remaining) : '',
+          time_remaining: @step.positive? ? format('%0.2fs', time_remaining) : '',
         }.merge! @tokens
       end
 
@@ -512,6 +512,7 @@ module Commander
 
       def show
         return if finished?
+
         erase_line
         if completed?
           HighLine.default_instance.say UI.replace_tokens(@complete_message, generate_tokens) if @complete_message.is_a? String

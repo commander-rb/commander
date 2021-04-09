@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Commander
   module HelpFormatter
     autoload :Base, 'commander/help_formatters/base'
@@ -43,7 +45,7 @@ module Commander
     module_function
 
     def indent(amount, text)
-      text.to_s.gsub("\n", "\n" + (' ' * amount))
+      text.to_s.gsub("\n", "\n#{' ' * amount}")
     end
   end
 end

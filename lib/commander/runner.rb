@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'optparse'
 
 module Commander
@@ -7,22 +9,10 @@ module Commander
     #++
 
     class CommandError < StandardError; end
+
     class InvalidCommandError < CommandError; end
 
-    ##
-    # Array of commands.
-
-    attr_reader :commands
-
-    ##
-    # Global options.
-
-    attr_reader :options
-
-    ##
-    # Hash of help formatter aliases.
-
-    attr_reader :help_formatter_aliases
+    attr_reader :commands, :options, :help_formatter_aliases
 
     ##
     # Initialize a new command runner. Optionally
@@ -41,7 +31,7 @@ module Commander
     # Return singleton Runner instance.
 
     def self.instance
-      @singleton ||= new
+      @instance ||= new
     end
 
     ##
@@ -76,7 +66,7 @@ module Commander
           OptionParser::InvalidArgument,
           OptionParser::MissingArgument => e
           abort e.to_s
-        rescue => e
+        rescue StandardError => e
           if @never_trace
             abort "error: #{e}."
           else
@@ -231,7 +221,7 @@ module Commander
     # Get active command within arguments passed to this runner.
 
     def active_command
-      @__active_command ||= command(command_name_from_args)
+      @active_command ||= command(command_name_from_args)
     end
 
     ##
@@ -240,15 +230,7 @@ module Commander
     # Returns the default command, if no valid commands found in the args.
 
     def command_name_from_args
-      @__command_name_from_args ||= (longest_valid_command_name_from(@args) || @default_command)
-    end
-
-    ##
-    # Attempts to locate a command name from within the provided arguments.
-    # Supports multi-word commands, using the largest possible match.
-
-    private def longest_valid_command_name_from(args)
-      valid_command_names_from(*args.dup).max
+      @command_name_from_args ||= (longest_valid_command_name_from(@args) || @default_command)
     end
 
     ##
@@ -264,7 +246,7 @@ module Commander
     # Help formatter instance.
 
     def help_formatter
-      @__help_formatter ||= program(:help_formatter).new self
+      @help_formatter ||= program(:help_formatter).new self
     end
 
     ##
@@ -341,6 +323,7 @@ module Commander
       options.each do |option|
         switches = option[:switches]
         next if switches.empty?
+
         option_takes_argument = switches.any? { |s| s =~ /[ =]/ }
         switches = expand_optionally_negative_switches(switches)
 
@@ -464,6 +447,16 @@ module Commander
 
     def say(*args) #:nodoc:
       HighLine.default_instance.say(*args)
+    end
+
+    private
+
+    ##
+    # Attempts to locate a command name from within the provided arguments.
+    # Supports multi-word commands, using the largest possible match.
+
+    def longest_valid_command_name_from(args)
+      valid_command_names_from(*args.dup).max
     end
   end
 end

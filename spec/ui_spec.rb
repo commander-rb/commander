@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Commander::UI do
@@ -5,7 +7,7 @@ describe Commander::UI do
 
   describe '.replace_tokens' do
     it 'should replace tokens within a string, with hash values' do
-      result = Commander::UI.replace_tokens 'Welcome :name, enjoy your :object'.freeze, name: 'TJ', object: 'cookie'
+      result = Commander::UI.replace_tokens 'Welcome :name, enjoy your :object', name: 'TJ', object: 'cookie'
       expect(result).to eq('Welcome TJ, enjoy your cookie')
     end
   end
@@ -15,7 +17,7 @@ describe Commander::UI do
       exception = false
       begin
         progress([]) {}
-      rescue
+      rescue StandardError
         exception = true
       end
       expect(exception).not_to be true

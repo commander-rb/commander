@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Array
   ##
   # Split _string_ into an array. Used in

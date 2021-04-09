@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Commander
   module Delegates
     %w(
@@ -11,7 +13,7 @@ module Commander
       always_trace!
       never_trace!
     ).each do |meth|
-      eval <<-END, binding, __FILE__, __LINE__
+      eval <<-END, binding, __FILE__, __LINE__ + 1
         def #{meth}(*args, &block)
           ::Commander::Runner.instance.#{meth}(*args, &block)
         end

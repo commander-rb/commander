@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Commander
   def configure(*configuration_opts, &configuration_block)
     configuration_module = Module.new

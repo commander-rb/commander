@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 require 'rubygems'
 require 'commander/import'
@@ -97,7 +98,7 @@ command :init do |c|
         File.chmod 0755, file
         say "Initialized template in #{file}"
       end
-    rescue => e
+    rescue StandardError => e
       abort e
     end
   end

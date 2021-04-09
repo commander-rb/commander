@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rubygems'
 require 'stringio'
 require 'simplecov'
@@ -6,7 +8,7 @@ SimpleCov.start do
 end
 
 # Unshift so that local files load instead of something in gems
-$LOAD_PATH.unshift File.dirname(__FILE__) + '/../lib'
+$LOAD_PATH.unshift "#{File.dirname(__FILE__)}/../lib"
 
 # This basically replicates the behavior of `require 'commander/import'`
 # but without adding an `at_exit` hook, which interferes with exit code
@@ -49,7 +51,7 @@ end
 # Create a new command runner
 
 def new_command_runner(*args, &block)
-  Commander::Runner.instance_variable_set :"@singleton", Commander::Runner.new(args)
+  Commander::Runner.instance_variable_set :@instance, Commander::Runner.new(args)
   program :name, 'test'
   program :version, '1.2.3'
   program :description, 'something'

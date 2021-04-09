@@ -1,18 +1,20 @@
 inherit_from: .rubocop_todo.yml
 
 AllCops:
-  TargetRubyVersion: 1.9
+  TargetRubyVersion: 2.4
+  NewCops: enable
+  SuggestExtensions: false
 
 # not Ruby 1.9.3 compatible
 Style/PercentLiteralDelimiters:
   Enabled: false
 
-# Offense count: 5
-Encoding:
-  Enabled: false
+# Enforce trailing comma after last item of multiline arrays.
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: comma
 
 # Enforce trailing comma after last item of multiline hashes.
-Style/TrailingCommaInLiteral:
+Style/TrailingCommaInHashLiteral:
   EnforcedStyleForMultiline: comma
 
 Metrics/BlockLength:
@@ -27,7 +29,7 @@ Style/ParallelAssignment:
 Style/NumericLiteralPrefix:
   EnforcedOctalStyle: zero_only
 
-Style/MethodMissing:
+Style/MissingRespondToMissing:
   Enabled: false
 
 Layout/SpaceInsideStringInterpolation:
@@ -42,3 +44,21 @@ Style/EmptyMethod:
 Metrics/ModuleLength:
   CountComments: false  # count full line comments?
   Max: 150
+
+Lint/EmptyBlock:
+  Enabled: false
+
+Style/FormatStringToken:
+  Enabled: false
+
+Style/MixinUsage:
+  Enabled: false
+
+Lint/ErbNewArguments:
+  Enabled: false
+
+Style/DocumentDynamicEvalDefinition:
+  Enabled: false
+
+Naming/HeredocDelimiterNaming:
+  Enabled: false

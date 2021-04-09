@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #--
 # Copyright (c) 2008-2009 TJ Holowaychuk <tj@vision-media.ca>
 #

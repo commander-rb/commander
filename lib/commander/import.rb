@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'commander'
 
 include Commander::Methods

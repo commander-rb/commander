@@ -1,9 +1,10 @@
+# frozen_string_literal: true
+
 require 'optparse'
 
 module Commander
   class Command
-    attr_accessor :name, :examples, :syntax, :description
-    attr_accessor :summary, :proxy_options, :options
+    attr_accessor :name, :examples, :syntax, :description, :summary, :proxy_options, :options
     attr_reader :global_options
 
     ##
@@ -140,6 +141,7 @@ module Commander
 
     def when_called(*args, &block)
       fail ArgumentError, 'must pass an object, class, or block.' if args.empty? && !block
+
       @when_called = block ? [block] : args
     end
     alias action when_called
@@ -163,6 +165,7 @@ module Commander
 
     def parse_options_and_call_procs(*args)
       return args if args.empty?
+
       # empty proxy_options before populating via OptionParser
       # prevents duplication of options if the command is run twice
       proxy_options.clear
@@ -182,8 +185,8 @@ module Commander
 
       case object
       when Proc then object.call(args, options)
-      when Class then meth != :call ? object.new.send(meth, args, options) : object.new(args, options)
-      else object.send(meth, args, options) if object
+      when Class then meth == :call ? object.new(args, options) : object.new.send(meth, args, options)
+      else object&.send(meth, args, options)
       end
     end
 

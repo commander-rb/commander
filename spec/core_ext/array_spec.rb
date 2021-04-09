@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Array do
@@ -12,7 +14,7 @@ describe Array do
 
     it 'should match %w behavior with multiple backslashes' do
       str = 'just a\\ test'
-      expect(Array.parse(str)).to eq(eval("%w(#{str})"))
+      expect(Array.parse(str)).to eq(['just', 'a test'])
     end
   end
 end

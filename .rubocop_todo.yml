@@ -10,12 +10,12 @@ Security/Eval:
   Enabled: false
 
 # Offense count: 2
-Lint/HandleExceptions:
+Lint/SuppressedException:
   Enabled: false
 
 # Offense count: 5
 Metrics/AbcSize:
-  Max: 29
+  Max: 30
 
 # Offense count: 1
 # Configuration parameters: CountComments.
@@ -28,7 +28,7 @@ Metrics/CyclomaticComplexity:
 
 # Offense count: 89
 # Configuration parameters: AllowURI, URISchemes.
-Metrics/LineLength:
+Layout/LineLength:
   Max: 242
 
 # Offense count: 7
@@ -41,7 +41,7 @@ Metrics/PerceivedComplexity:
   Max: 14
 
 # Offense count: 1
-Style/AccessorMethodName:
+Naming/AccessorMethodName:
   Enabled: false
 
 # Offense count: 18
