@@ -1,3 +1,9 @@
+=== 4.6.0 / 2021-04-09
+
+* Fix error with SortedSet on Ruby 3.0 (#98).
+* Remove `#reset_io` as it didn't do anything.
+* Drop support for Ruby < 2.4.
+
 === 4.5.2 / 2020-03-12
 
 * Fix bug handling global options provided in option=value form (#47). (@orien)
