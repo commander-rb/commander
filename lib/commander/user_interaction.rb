@@ -344,8 +344,13 @@ module Commander
           # All Classes that respond to #parse
           # Ignore constants that trigger deprecation warnings
           available_classes = (Object.constants - DEPRECATED_CONSTANTS).map do |const|
-            Object.const_get(const)
-          end.select do |const|
+            begin
+              Object.const_get(const)
+            rescue RuntimeError
+              # Rescue errors in Ruby 3 for SortedSet:
+              # The `SortedSet` class has been extracted from the `set` library.
+            end
+          end.compact.select do |const|
             const.class == Class && const.respond_to?(:parse)
           end
 
