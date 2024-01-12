@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
     'homepage_uri' => s.homepage,
     'source_code_uri' => "#{s.homepage}/tree/v#{s.version}",
   }
-  s.required_ruby_version = '>= 2.4'
+  s.required_ruby_version = '>= 3.0'
 
   s.files         = `git ls-files`.split("\n").reject { |f| f.match(%r{^(test|spec|features)/}) }
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

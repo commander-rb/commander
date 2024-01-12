@@ -20,8 +20,8 @@ module Commander
       END
     end
 
-    def defined_commands(*args, &block)
-      ::Commander::Runner.instance.commands(*args, &block)
+    def defined_commands(...)
+      ::Commander::Runner.instance.commands(...)
     end
   end
 end
