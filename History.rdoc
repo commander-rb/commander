@@ -1,3 +1,7 @@
+=== 5.0.0 / 2024-01-15
+
+* Drop support for Ruby < 3.0; update highline dependency to ~3.0 (#102). (@belousovAV)
+
 === 4.6.0 / 2021-04-09
 
 * Fix error with SortedSet on Ruby 3.0 (#98).
