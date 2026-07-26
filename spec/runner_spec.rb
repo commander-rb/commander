@@ -32,6 +32,16 @@ describe Commander do
       program :help_formatter, :compact
       expect(program(:help_formatter)).to eq(Commander::HelpFormatter::TerminalCompact)
     end
+
+    it 'should preserve a single falsy value rather than wrapping it in an array' do
+      program :help_paging, false
+      expect(program(:help_paging)).to eq(false)
+    end
+
+    it 'should store a block for later invocation' do
+      program(:int_block) { :interrupted }
+      expect(program(:int_block).call).to eq(:interrupted)
+    end
   end
 
   describe '#command' do
@@ -41,6 +51,16 @@ describe Commander do
 
     it 'should return nil when the command does not exist' do
       expect(command(:im_not_real)).to be_nil
+    end
+  end
+
+  describe '#command_exists?' do
+    it 'should be truthy when the command exists' do
+      expect(command_runner.command_exists?(:test)).to be_truthy
+    end
+
+    it 'should be falsy when the command does not exist' do
+      expect(command_runner.command_exists?(:im_not_real)).to be_falsy
     end
   end
 

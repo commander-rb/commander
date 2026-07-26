@@ -3,5 +3,4 @@
 Gemfile.lock
 pkg/*
 .rvmrc
-.ruby-version
 coverage/*

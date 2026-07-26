@@ -3,13 +3,23 @@
 require 'optparse'
 
 module Commander
+  ##
+  # = Runner
+  #
+  # The engine behind Commander's DSL: holds the registered commands,
+  # global options, and program metadata, parses ARGV, and dispatches to
+  # the matched Commander::Command. Accessed as a singleton
+  # (Runner.instance) by Commander::Delegates so that the top-level
+  # +command+/+program+/+run!+ methods all operate on the same runner.
   class Runner
     #--
     # Exceptions
     #++
 
+    # Raised when required program information (e.g. :version) is missing.
     class CommandError < StandardError; end
 
+    # Raised when no command matches the given arguments.
     class InvalidCommandError < CommandError; end
 
     attr_reader :commands, :options, :help_formatter_aliases
@@ -138,7 +148,7 @@ module Commander
         @program[key] = block
       else
         unless args.empty?
-          @program[key] = args.count == 1 ? args[0] : args
+          @program[key] = args.length == 1 ? args[0] : args
         end
         @program[key]
       end
@@ -215,7 +225,7 @@ module Commander
       @commands[name.to_s]
     end
 
-    #:stopdoc:
+    # :stopdoc:
 
     ##
     # Get active command within arguments passed to this runner.
@@ -230,7 +240,7 @@ module Commander
     # Returns the default command, if no valid commands found in the args.
 
     def command_name_from_args
-      @command_name_from_args ||= (longest_valid_command_name_from(@args) || @default_command)
+      @command_name_from_args ||= longest_valid_command_name_from(@args) || @default_command
     end
 
     ##
@@ -358,8 +368,8 @@ module Commander
     def expand_optionally_negative_switches(switches)
       switches.reduce([]) do |memo, val|
         if val =~ /\[no-\]/
-          memo << val.gsub(/\[no-\]/, '')
-          memo << val.gsub(/\[no-\]/, 'no-')
+          memo << val.gsub('[no-]', '')
+          memo << val.gsub('[no-]', 'no-')
         else
           memo << val
         end
@@ -430,7 +440,7 @@ module Commander
     #
 
     def self.switch_to_sym(switch)
-      switch.scan(/[\-\]](\w+)/).join('_').to_sym rescue nil
+      switch.scan(/[-\]](\w+)/).join('_').to_sym rescue nil
     end
 
     ##
@@ -445,7 +455,7 @@ module Commander
       end
     end
 
-    def say(*args) #:nodoc:
+    def say(*args) # :nodoc:
       HighLine.default_instance.say(*args)
     end
 

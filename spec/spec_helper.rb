@@ -4,7 +4,8 @@ require 'rubygems'
 require 'stringio'
 require 'simplecov'
 SimpleCov.start do
-  add_filter '/spec/'
+  skip '/spec/'
+  minimum_coverage 100
 end
 
 # Unshift so that local files load instead of something in gems
@@ -23,7 +24,9 @@ def mock_terminal
 end
 
 # Stub Kernel.abort
-TestSystemExit = Class.new(RuntimeError)
+class TestSystemExit < RuntimeError
+end
+
 module Commander
   class Runner
     def abort(message)

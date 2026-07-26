@@ -1,7 +1,7 @@
 inherit_from: .rubocop_todo.yml
 
 AllCops:
-  TargetRubyVersion: 3.0
+  TargetRubyVersion: 3.1
   NewCops: enable
   SuggestExtensions: false
 
@@ -52,9 +52,6 @@ Style/FormatStringToken:
   Enabled: false
 
 Style/MixinUsage:
-  Enabled: false
-
-Lint/ErbNewArguments:
   Enabled: false
 
 Style/DocumentDynamicEvalDefinition:

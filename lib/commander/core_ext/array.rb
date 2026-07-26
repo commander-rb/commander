@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+##
+# Adds Array.parse, used by HighLine's #ask/#ask_for_array so that
+# +ask '...', Array+ splits a raw response into a Ruby Array.
 class Array
   ##
   # Split _string_ into an array. Used in

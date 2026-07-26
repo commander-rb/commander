@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
-require 'tempfile'
+require 'pathname'
 require 'shellwords'
+require 'tempfile'
 
 module Commander
   ##
@@ -10,21 +11,8 @@ module Commander
   # Commander's user interaction module mixes in common
   # methods which extend HighLine's functionality such
   # as a #password method rather than calling #ask directly.
-
   module UI
     module_function
-
-    #--
-    # Auto include growl when available.
-    #++
-
-    begin
-      require 'growl'
-    rescue LoadError
-      # Do nothing
-    else
-      include Growl
-    end
 
     ##
     # Ask the user for a password. Specify a custom
@@ -40,9 +28,9 @@ module Commander
     ##
     # Choose from a set array of _choices_.
 
-    def choose(message = nil, *choices, &block)
+    def choose(message = nil, *choices, &)
       say message if message
-      super(*choices, &block)
+      super(*choices, &)
     end
 
     ##
@@ -167,7 +155,7 @@ module Commander
 
     def converse(prompt, responses = {})
       i, commands = 0, responses.map { |_key, value| value.inspect }.join(',')
-      statement = responses.inject '' do |inner_statement, (key, value)|
+      statement = responses.inject(+'') do |inner_statement, (key, value)|
         inner_statement <<
         (
           (i += 1) == 1 ?
@@ -226,8 +214,8 @@ module Commander
       return unless block
 
       yield
-      $stdin, $stdout = orig_stdin, orig_stdout
-      reset_io
+    ensure
+      $stdin, $stdout = orig_stdin, orig_stdout if block
     end
 
     ##
@@ -235,7 +223,7 @@ module Commander
     # editor. Returns the name as a string, nil if none is available.
 
     def available_editor(preferred = nil)
-      [preferred, ENV['EDITOR'], 'mate -w', 'vim', 'vi', 'emacs', 'nano', 'pico']
+      [preferred, ENV.fetch('EDITOR', nil), 'mate -w', 'vim', 'vi', 'emacs', 'nano', 'pico']
         .compact
         .find { |name| system("hash #{name.split.first} 2>&-") }
     end
@@ -260,7 +248,7 @@ module Commander
       begin
         tmpfile.write input if input
         tmpfile.close
-        system("#{editor} #{tmpfile.path.shellescape}") ? IO.read(tmpfile.path) : nil
+        system("#{editor} #{tmpfile.path.shellescape}") ? File.read(tmpfile.path) : nil
       ensure
         tmpfile.unlink
       end
@@ -320,10 +308,18 @@ module Commander
     end
 
     ##
-    # Implements ask_for_CLASS methods.
-
+    # Implements +ask_for_CLASS+ methods, e.g. +ask_for_float+,
+    # +ask_for_date+, or +ask_for_pathname+: each prompts the user via
+    # HighLine and parses the response as the requested class. Common
+    # classes (Float, Integer, String, Symbol, Regexp, Array, File,
+    # Pathname) get explicit methods defined below; any other class that
+    # responds to +.parse+ (Date, Time, URI, ...) is resolved dynamically
+    # by #method_missing.
     module AskForClass
-      DEPRECATED_CONSTANTS = %i[Config TimeoutError MissingSourceFile NIL TRUE FALSE Fixnum Bignum Data].freeze
+      # Constants that are either deprecated (and would warn when read via
+      # Object.const_get) or simply not meant to be treated as ask_for_*
+      # targets; skipped while scanning Object.constants in #method_missing.
+      DEPRECATED_CONSTANTS = %i[Config TimeoutError MissingSourceFile NIL TRUE FALSE Fixnum Bignum Data ScanError].freeze
 
       # define methods for common classes
       [Float, Integer, String, Symbol, Regexp, Array, File, Pathname].each do |klass|
@@ -332,7 +328,15 @@ module Commander
         end
       end
 
-      def method_missing(method_name, *arguments, &block)
+      ##
+      # Handles <tt>ask_for_*</tt> calls not covered by one of the
+      # explicitly defined methods above, by searching for a same-named
+      # top-level class that implements +.parse+ and asking HighLine to
+      # parse the response as that class. Falls through to +super+ (and
+      # so ultimately raises NoMethodError) for unrecognized method names
+      # or unrecognized classes.
+
+      def method_missing(method_name, *arguments, &)
         if method_name.to_s =~ /^ask_for_(.*)/
           if arguments.count != 1
             fail ArgumentError, "wrong number of arguments (given #{arguments.count}, expected 1)"
@@ -345,10 +349,7 @@ module Commander
           # Ignore constants that trigger deprecation warnings
           available_classes = (Object.constants - DEPRECATED_CONSTANTS).map do |const|
             Object.const_get(const)
-          rescue RuntimeError
-            # Rescue errors in Ruby 3 for SortedSet:
-            # The `SortedSet` class has been extracted from the `set` library.
-          end.compact.select do |const|
+          end.select do |const|
             const.instance_of?(Class) && const.respond_to?(:parse)
           end
 
@@ -371,7 +372,7 @@ module Commander
     ##
     # Substitute _hash_'s keys with their associated values in _str_.
 
-    def replace_tokens(str, hash) #:nodoc:
+    def replace_tokens(str, hash) # :nodoc:
       hash.inject(str) do |string, (key, value)|
         string.gsub ":#{key}", value.to_s
       end
@@ -412,7 +413,6 @@ module Commander
     #     { :uri => uri } # Can now use :uri within :format option
     #   end
     #
-
     class ProgressBar
       ##
       # Creates a new progress bar.

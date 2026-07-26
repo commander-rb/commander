@@ -26,6 +26,22 @@ describe Commander::Command do
       @options.send = 'foo'
       expect(@options.__send__(:send)).to eq('foo')
     end
+
+    it 'should expose the underlying table via #__hash__' do
+      @options.send = 'foo'
+      expect(@options.__hash__).to eq(send: 'foo')
+    end
+
+    it 'should describe itself via #inspect' do
+      @options.send = 'foo'
+      expect(@options.inspect).to eq('<Commander::Command::Options send="foo">')
+    end
+  end
+
+  describe '#inspect' do
+    it 'describes the command by name' do
+      expect(@command.inspect).to eq('<Commander::Command:test>')
+    end
   end
 
   describe '#option' do
@@ -71,6 +87,27 @@ describe Commander::Command do
         expect(object).to receive(:foo).once
         @command.when_called object, :foo
         @command.run 'foo'
+      end
+
+      it 'instantiating a class and calling #call by default' do
+        klass = Class.new do
+          def initialize(args, options)
+            @args, @options = args, options
+          end
+        end
+        expect(klass).to receive(:new).once.and_call_original
+        @command.when_called klass
+        @command.run 'foo'
+      end
+
+      it 'instantiating a class and calling an arbitrary method' do
+        klass = Class.new do
+          def foo(args, _options)
+            args
+          end
+        end
+        @command.when_called klass, :foo
+        expect(@command.run('foo')).to eq(['foo'])
       end
 
       it 'should raise an error when no handler is present' do

@@ -3,13 +3,29 @@
 require 'optparse'
 
 module Commander
+  ##
+  # A single named command belonging to a Commander::Runner: its
+  # description, examples, options (parsed via OptionParser), and the
+  # handler invoked with the remaining arguments once options have been
+  # parsed. Built up via the block yielded by Runner#command, e.g.
+  #
+  #   command :foo do |c|
+  #     c.syntax = 'foo [options]'
+  #     c.option '--bar', 'A switch'
+  #     c.action { |args, options| ... }
+  #   end
   class Command
     attr_accessor :name, :examples, :syntax, :description, :summary, :proxy_options, :options
     attr_reader :global_options
 
     ##
     # Options struct.
-
+    #
+    # An open-ended, OpenStruct-like object populated by #option and
+    # #proxy_option_struct. Reading an unset attribute returns +nil+;
+    # writing any attribute (via +some_attr=+) stores it. Almost all of
+    # Object's own instance methods are stripped out (see Blank) so that
+    # option names never collide with built-ins like +send+ or +class+.
     class Options
       include Blank
 
@@ -17,13 +33,24 @@ module Commander
         @table = {}
       end
 
+      ##
+      # The underlying Hash of option name (Symbol) => value pairs.
+
       def __hash__
         @table
       end
 
+      ##
+      # Reads or writes an arbitrary option. <tt>options.foo</tt> reads
+      # the +:foo+ entry; <tt>options.foo = 1</tt> writes it.
+
       def method_missing(meth, *args)
         meth.to_s =~ /=$/ ? @table[meth.to_s.chop.to_sym] = args.first : @table[meth]
       end
+
+      ##
+      # Merge _defaults_ into this struct, without overwriting any
+      # options already set.
 
       def default(defaults = {})
         @table = defaults.merge! @table
@@ -157,7 +184,7 @@ module Commander
       call parse_options_and_call_procs(*args)
     end
 
-    #:stopdoc:
+    # :stopdoc:
 
     ##
     # Parses options and calls associated procs,
