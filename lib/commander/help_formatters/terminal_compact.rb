@@ -12,7 +12,6 @@ module Commander
       ##
       # Compile the ERB template named _name_ (+:help+ or
       # +:command_help+) from this formatter's template directory.
-
       def template(name)
         ERB.new(File.read(File.join(File.dirname(__FILE__), 'terminal_compact', "#{name}.erb")), trim_mode: '-')
       end

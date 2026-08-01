@@ -25,7 +25,6 @@ module Commander
       ##
       # The (possibly decorated) binding of _target_, suitable for
       # passing to ERB#result.
-
       def get_binding
         @target.instance_eval { binding }.tap do |bind|
           decorate_binding(bind)
@@ -50,21 +49,18 @@ module Commander
 
       ##
       # Length, in characters, of the longest registered command name.
-
       def max_command_length(bind)
         max_key_length(bind.eval('@commands'))
       end
 
       ##
       # Length, in characters, of the longest registered command alias.
-
       def max_aliases_length(bind)
         max_key_length(bind.eval('@aliases'))
       end
 
       ##
       # Length of the longest key in _hash_, or _default_ when _hash_ is empty.
-
       def max_key_length(hash, default = 20)
         longest = hash.keys.max_by(&:size)
         longest ? longest.size : default
@@ -76,7 +72,6 @@ module Commander
     ##
     # Indent each line of _text_ (after the first) by _amount_ spaces.
     # Used by the help templates to align multi-line descriptions.
-
     def indent(amount, text)
       text.to_s.gsub("\n", "\n#{' ' * amount}")
     end

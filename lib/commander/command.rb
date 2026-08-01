@@ -35,7 +35,6 @@ module Commander
 
       ##
       # The underlying Hash of option name (Symbol) => value pairs.
-
       def __hash__
         @table
       end
@@ -43,7 +42,6 @@ module Commander
       ##
       # Reads or writes an arbitrary option. <tt>options.foo</tt> reads
       # the +:foo+ entry; <tt>options.foo = 1</tt> writes it.
-
       def method_missing(meth, *args)
         meth.to_s =~ /=$/ ? @table[meth.to_s.chop.to_sym] = args.first : @table[meth]
       end
@@ -51,7 +49,6 @@ module Commander
       ##
       # Merge _defaults_ into this struct, without overwriting any
       # options already set.
-
       def default(defaults = {})
         @table = defaults.merge! @table
       end
@@ -63,7 +60,6 @@ module Commander
 
     ##
     # Initialize new command with specified _name_.
-
     def initialize(name)
       @name, @examples, @when_called = name.to_s, [], []
       @options, @proxy_options = [], []
@@ -82,7 +78,6 @@ module Commander
     #     c.example "Should do something", "my_command something"
     #   end
     #
-
     def example(description, command)
       @examples << [description, command]
     end
@@ -133,7 +128,6 @@ module Commander
     #   c.option '--time TIME', Time
     #   c.option '--date [DATE]', Date
     #
-
     def option(*args, &block)
       switches, description = Runner.separate_switches_from_description(*args)
       proc = block || option_proc(switches)
@@ -165,7 +159,6 @@ module Commander
     #   # Pass an object to handle callback (requires method symbol)
     #   c.when_called SomeObject, :some_method
     #
-
     def when_called(*args, &block)
       fail ArgumentError, 'must pass an object, class, or block.' if args.empty? && !block
 
@@ -179,7 +172,6 @@ module Commander
     # * parses options, call option blocks
     # * invokes when_called proc
     #
-
     def run(*args)
       call parse_options_and_call_procs(*args)
     end
@@ -189,7 +181,6 @@ module Commander
     ##
     # Parses options and calls associated procs,
     # returning the arguments remaining.
-
     def parse_options_and_call_procs(*args)
       return args if args.empty?
 
@@ -204,7 +195,6 @@ module Commander
 
     ##
     # Call the commands when_called block with _args_.
-
     def call(args = [])
       object, meth = @when_called[0, 2]
       meth ||= :call
@@ -220,7 +210,6 @@ module Commander
     ##
     # Creates an Options instance populated with the option values
     # collected by the #option_proc.
-
     def proxy_option_struct
       (global_options + proxy_options).each_with_object(Options.new) do |(option, value), options|
         # options that are present will evaluate to true
@@ -234,7 +223,6 @@ module Commander
     # Option proxy proc used when a block is not explicitly passed
     # via the #option method. This allows commander to auto-populate
     # and work with option values.
-
     def option_proc(switches)
       ->(value) { proxy_options << [Runner.switch_to_sym(switches.last), value] }
     end

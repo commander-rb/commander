@@ -8,7 +8,6 @@ module Commander
   module Platform
     ##
     # Whether the current process is running under JRuby.
-
     def self.jruby?
       defined?(RUBY_ENGINE) && (RUBY_ENGINE == 'jruby')
     end

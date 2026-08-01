@@ -23,7 +23,6 @@ jobs:
           - '3.4'
           - '4.0.6'
           - jruby
-          - truffleruby
 
     steps:
       - uses: actions/checkout@v4

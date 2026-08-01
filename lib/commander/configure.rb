@@ -29,7 +29,6 @@ module Commander
   #   Commander.configure(default_name) do |name|
   #     program :name, name
   #   end
-
   def configure(*configuration_opts, &)
     configuration_module = Module.new
     configuration_module.extend Commander::Methods

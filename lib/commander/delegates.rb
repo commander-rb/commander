@@ -30,7 +30,6 @@ module Commander
     ##
     # Delegates to Commander::Runner#commands, returning the hash of
     # registered command name => Commander::Command pairs.
-
     def defined_commands(...)
       ::Commander::Runner.instance.commands(...)
     end

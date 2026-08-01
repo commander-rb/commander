@@ -18,7 +18,6 @@ module Commander
     # Ask the user for a password. Specify a custom
     # _message_ other than 'Password: ' or override the
     # default _mask_ of '*'.
-
     def password(message = 'Password: ', mask = '*')
       pass = ask(message) { |q| q.echo = mask }
       pass = password message, mask if pass.nil? || pass.empty?
@@ -27,7 +26,6 @@ module Commander
 
     ##
     # Choose from a set array of _choices_.
-
     def choose(message = nil, *choices, &)
       say message if message
       super(*choices, &)
@@ -41,7 +39,6 @@ module Commander
     #   remove  path/to/old_file.rb
     #   remove  path/to/old_file2.rb
     #
-
     def log(action, *args)
       say format('%15s  %s', action, args.join(' '))
     end
@@ -53,7 +50,6 @@ module Commander
     #   say_ok 'Everything is fine'
     #   say_ok 'It is ok', 'This is ok too'
     #
-
     def say_ok(*args)
       args.each do |arg|
         say HighLine.default_instance.color(arg, :green)
@@ -67,7 +63,6 @@ module Commander
     #   say_warning 'This is a warning'
     #   say_warning 'Be careful', 'Think about it'
     #
-
     def say_warning(*args)
       args.each do |arg|
         say HighLine.default_instance.color(arg, :yellow)
@@ -81,7 +76,6 @@ module Commander
     #   say_error 'Everything is not fine'
     #   say_error 'It is not ok', 'This is not ok too'
     #
-
     def say_error(*args)
       args.each do |arg|
         say HighLine.default_instance.color(arg, :red)
@@ -101,7 +95,6 @@ module Commander
     #   * color:    black blue cyan green magenta red white yellow
     #   * style:    blink bold clear underline
     #   * highligh: on_<color>
-
     def color(*args)
       say HighLine.default_instance.color(*args)
     end
@@ -123,7 +116,6 @@ module Commander
     #
     # * MacOS only
     #
-
     def speak(message, voice = :Alex, rate = 175)
       Thread.new { applescript "say #{message.inspect} using #{voice.to_s.inspect} speaking rate #{rate}" }
     end
@@ -152,7 +144,6 @@ module Commander
     #
     # * MacOS only
     #
-
     def converse(prompt, responses = {})
       i, commands = 0, responses.map { |_key, value| value.inspect }.join(',')
       statement = responses.inject(+'') do |inner_statement, (key, value)|
@@ -177,7 +168,6 @@ module Commander
 
     ##
     # Execute apple _script_.
-
     def applescript(script)
       `osascript -e "#{ script.gsub('"', '\"') }"`
     end
@@ -206,7 +196,6 @@ module Commander
     #     end
     #   end
     #
-
     def io(input = nil, output = nil, &block)
       orig_stdin, orig_stdout = $stdin, $stdout
       $stdin = File.new(input) if input
@@ -221,7 +210,6 @@ module Commander
     ##
     # Find an editor available in path. Optionally supply the _preferred_
     # editor. Returns the name as a string, nil if none is available.
-
     def available_editor(preferred = nil)
       [preferred, ENV.fetch('EDITOR', nil), 'mate -w', 'vim', 'vi', 'emacs', 'nano', 'pico']
         .compact
@@ -240,7 +228,6 @@ module Commander
     #   ask_editor('foo')         # => prompts EDITOR with default text of 'foo'
     #   ask_editor('foo', 'mate -w')  # => prompts TextMate with default text of 'foo'
     #
-
     def ask_editor(input = nil, preferred_editor = nil)
       editor = available_editor preferred_editor
       program = Commander::Runner.instance.program(:name).downcase rescue 'commander'
@@ -256,7 +243,6 @@ module Commander
 
     ##
     # Enable paging of output after called.
-
     def enable_paging
       return unless $stdout.tty?
       return unless Process.respond_to? :fork
@@ -300,7 +286,6 @@ module Commander
     #     res = open uri
     #   end
     #
-
     def progress(arr, options = {})
       bar = ProgressBar.new arr.length, options
       bar.show
@@ -335,7 +320,6 @@ module Commander
       # parse the response as that class. Falls through to +super+ (and
       # so ultimately raises NoMethodError) for unrecognized method names
       # or unrecognized classes.
-
       def method_missing(method_name, *arguments, &)
         if method_name.to_s =~ /^ask_for_(.*)/
           if arguments.count != 1
@@ -371,7 +355,6 @@ module Commander
 
     ##
     # Substitute _hash_'s keys with their associated values in _str_.
-
     def replace_tokens(str, hash) # :nodoc:
       hash.inject(str) do |string, (key, value)|
         string.gsub ":#{key}", value.to_s
@@ -438,7 +421,6 @@ module Commander
       #   :time_elapsed
       #   :time_remaining
       #
-
       def initialize(total, options = {})
         @total_steps, @step, @start_time = total, 0, Time.now
         @title = options.fetch :title, 'Progress'
@@ -452,7 +434,6 @@ module Commander
 
       ##
       # Completion percentage.
-
       def percent_complete
         if @total_steps.zero?
           100
@@ -463,35 +444,30 @@ module Commander
 
       ##
       # Time that has elapsed since the operation started.
-
       def time_elapsed
         Time.now - @start_time
       end
 
       ##
       # Estimated time remaining.
-
       def time_remaining
         (time_elapsed / @step) * steps_remaining
       end
 
       ##
       # Number of steps left.
-
       def steps_remaining
         @total_steps - @step
       end
 
       ##
       # Formatted progress bar.
-
       def progress_bar
         (@progress_str * (@width * percent_complete / 100)).ljust @width, @incomplete_str
       end
 
       ##
       # Generates tokens for this step.
-
       def generate_tokens
         {
           title: @title,
@@ -507,7 +483,6 @@ module Commander
 
       ##
       # Output the progress bar.
-
       def show
         return if finished?
 
@@ -521,14 +496,12 @@ module Commander
 
       ##
       # Whether or not the operation is complete, and we have finished.
-
       def finished?
         @step == @total_steps + 1
       end
 
       ##
       # Whether or not the operation has completed.
-
       def completed?
         @step == @total_steps
       end
@@ -536,7 +509,6 @@ module Commander
       ##
       # Increment progress. Optionally pass _tokens_ which
       # can be displayed in the output format.
-
       def increment(tokens = {})
         @step += 1
         @tokens.merge! tokens if tokens.is_a? Hash
@@ -545,7 +517,6 @@ module Commander
 
       ##
       # Erase previous terminal line.
-
       def erase_line
         # highline does not expose the output stream
         HighLine.default_instance.instance_variable_get('@output').print "\r\e[K"
