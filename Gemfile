@@ -9,5 +9,7 @@ group :development, :test do
   gem 'rake', '~> 13.0'
   gem 'rspec', '~> 3.13'
   gem 'rubocop', '~> 1.88'
-  gem 'simplecov', '~> 1.0'
+  # 1.x requires Ruby >= 3.2; allow the last 0.x on Ruby 3.1 while newer
+  # rubies still resolve to 1.x.
+  gem 'simplecov', '>= 0.22', '< 2'
 end
