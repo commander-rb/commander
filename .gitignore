@@ -4,5 +4,3 @@ Gemfile.lock
 pkg/*
 .rvmrc
 coverage/*
-.necro/
-NECRO_MODERNIZATION_REPORT.md
