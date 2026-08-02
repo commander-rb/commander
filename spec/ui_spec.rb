@@ -180,6 +180,11 @@ describe Commander::UI do
     # this block tests it directly.
     before do
       allow(Commander::UI).to receive(:enable_paging).and_call_original
+      # On platforms without fork (e.g. JRuby) enable_paging returns early
+      # before the forking logic these specs exercise; pretend fork exists
+      # so the behavior under test is reached everywhere.
+      allow(Process).to receive(:respond_to?).and_call_original
+      allow(Process).to receive(:respond_to?).with(:fork).and_return(true)
     end
 
     it 'does nothing when stdout is not a tty' do
