@@ -304,7 +304,7 @@ module Commander
       # Constants that are either deprecated (and would warn when read via
       # Object.const_get) or simply not meant to be treated as ask_for_*
       # targets; skipped while scanning Object.constants in #method_missing.
-      DEPRECATED_CONSTANTS = %i[Config TimeoutError MissingSourceFile NIL TRUE FALSE Fixnum Bignum Data ScanError].freeze
+      DEPRECATED_CONSTANTS = %i[Config TimeoutError MissingSourceFile NIL TRUE FALSE Fixnum Bignum Data ScanError SortedSet].freeze
 
       # define methods for common classes
       [Float, Integer, String, Symbol, Regexp, Array, File, Pathname].each do |klass|
