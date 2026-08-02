@@ -4,7 +4,17 @@ require 'rubygems'
 require 'stringio'
 require 'simplecov'
 SimpleCov.start do
-  add_filter '/spec/'
+  # simplecov 1.x renamed `add_filter` to `skip`; the 0.x line used on
+  # Ruby 3.1 only has `add_filter`. Use whichever the installed version
+  # provides so both resolve without deprecation warnings or errors.
+  if respond_to?(:skip)
+    skip '/spec/'
+  else
+    add_filter '/spec/'
+  end
+  # JRuby's coverage measurement is inaccurate, so only enforce the
+  # threshold on MRI/CRuby where it's reliable.
+  minimum_coverage 100 unless RUBY_ENGINE == 'jruby'
 end
 
 # Unshift so that local files load instead of something in gems
@@ -23,7 +33,9 @@ def mock_terminal
 end
 
 # Stub Kernel.abort
-TestSystemExit = Class.new(RuntimeError)
+class TestSystemExit < RuntimeError
+end
+
 module Commander
   class Runner
     def abort(message)

@@ -1,6 +1,13 @@
 # frozen_string_literal: true
 
 module Commander
+  ##
+  # = Delegates
+  #
+  # Mixed into Commander::Methods to expose the singleton
+  # Commander::Runner instance's DSL (+command+, +program+, +run!+, etc.)
+  # as top-level methods, so scripts can call them directly instead of
+  # reaching through <tt>Commander::Runner.instance</tt>.
   module Delegates
     %w(
       add_command
@@ -20,6 +27,9 @@ module Commander
       END
     end
 
+    ##
+    # Delegates to Commander::Runner#commands, returning the hash of
+    # registered command name => Commander::Command pairs.
     def defined_commands(...)
       ::Commander::Runner.instance.commands(...)
     end

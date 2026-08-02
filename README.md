@@ -1,5 +1,4 @@
-[<img src="https://api.travis-ci.org/commander-rb/commander.svg" alt="Build Status" />](https://travis-ci.org/commander-rb/commander)
-[![Inline docs](https://inch-ci.org/github/commander-rb/commander.svg)](https://inch-ci.org/github/commander-rb/commander)
+[![CI](https://github.com/commander-rb/commander/actions/workflows/ci.yml/badge.svg)](https://github.com/commander-rb/commander/actions/workflows/ci.yml)
 
 # Commander
 
@@ -24,8 +23,11 @@ features, and an elegant API.
 * Sexy paging for long bodies of text
 * Support for MacOS text-to-speech
 * Command aliasing (very powerful, as both switches and arguments can be used)
-* Growl notification support for MacOS
 * Use the `commander` executable to initialize a commander driven program
+
+## Requirements
+
+Ruby >= 3.1 (tested through Ruby 4.0).
 
 ## Installation
 
@@ -50,7 +52,6 @@ as well as an object, specifying a method to call, so view the RDoc for more inf
 ### Classic style
 
 ```ruby
-require 'rubygems'
 require 'commander/import'
 
 # :name is optional, otherwise uses the basename of this executable
@@ -93,7 +94,6 @@ $ foobar bar --suffix '}' --prefix '{'
 **NOTE:** Make sure to use `require 'commander'` rather than `require 'commander/import'`, otherwise Commander methods will still be imported into the global namespace.
 
 ```ruby
-require 'rubygems'
 require 'commander'
 
 class MyApplication
@@ -122,7 +122,6 @@ MyApplication.new.run if $0 == __FILE__
 ### Block style
 
 ```ruby
-require 'rubygems'
 require 'commander'
 
 Commander.configure do
@@ -238,30 +237,6 @@ else
     speak 'Ok then, bye.'
   end
 end
-```
-
-## Growl Notifications
-
-Commander provides methods for displaying Growl notifications. To use these
-methods you need to install https://github.com/tj/growl which utilizes
-the [growlnotify](https://growl.info/extras.php#growlnotify) executable. Note that
-growl is auto-imported by Commander when available, no need to require.
-
-```ruby
-# Display a generic Growl notification
-notify 'Something happened'
-
-# Display an 'info' status notification
-notify_info 'You have #{emails.length} new email(s)'
-
-# Display an 'ok' status notification
-notify_ok 'Gems updated'
-
-# Display a 'warning' status notification
-notify_warning '1 gem failed installation'
-
-# Display an 'error' status notification
-notify_error "Gem #{name} failed"
 ```
 
 ## Commander Goodies
@@ -459,11 +434,11 @@ For feature rich ASCII tables for your terminal app check out the terminal-table
 
 ## Running Specifications
 
-    $ rake spec
+    $ bundle exec rake spec
 
 OR
 
-    $ spec --color spec
+    $ bundle exec rspec
 
 ## Contrib
 

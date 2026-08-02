@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
-require 'tempfile'
+require 'pathname'
 require 'shellwords'
+require 'tempfile'
 
 module Commander
   ##
@@ -10,27 +11,13 @@ module Commander
   # Commander's user interaction module mixes in common
   # methods which extend HighLine's functionality such
   # as a #password method rather than calling #ask directly.
-
   module UI
     module_function
-
-    #--
-    # Auto include growl when available.
-    #++
-
-    begin
-      require 'growl'
-    rescue LoadError
-      # Do nothing
-    else
-      include Growl
-    end
 
     ##
     # Ask the user for a password. Specify a custom
     # _message_ other than 'Password: ' or override the
     # default _mask_ of '*'.
-
     def password(message = 'Password: ', mask = '*')
       pass = ask(message) { |q| q.echo = mask }
       pass = password message, mask if pass.nil? || pass.empty?
@@ -39,10 +26,9 @@ module Commander
 
     ##
     # Choose from a set array of _choices_.
-
-    def choose(message = nil, *choices, &block)
+    def choose(message = nil, *choices, &)
       say message if message
-      super(*choices, &block)
+      super(*choices, &)
     end
 
     ##
@@ -53,7 +39,6 @@ module Commander
     #   remove  path/to/old_file.rb
     #   remove  path/to/old_file2.rb
     #
-
     def log(action, *args)
       say format('%15s  %s', action, args.join(' '))
     end
@@ -65,7 +50,6 @@ module Commander
     #   say_ok 'Everything is fine'
     #   say_ok 'It is ok', 'This is ok too'
     #
-
     def say_ok(*args)
       args.each do |arg|
         say HighLine.default_instance.color(arg, :green)
@@ -79,7 +63,6 @@ module Commander
     #   say_warning 'This is a warning'
     #   say_warning 'Be careful', 'Think about it'
     #
-
     def say_warning(*args)
       args.each do |arg|
         say HighLine.default_instance.color(arg, :yellow)
@@ -93,7 +76,6 @@ module Commander
     #   say_error 'Everything is not fine'
     #   say_error 'It is not ok', 'This is not ok too'
     #
-
     def say_error(*args)
       args.each do |arg|
         say HighLine.default_instance.color(arg, :red)
@@ -113,7 +95,6 @@ module Commander
     #   * color:    black blue cyan green magenta red white yellow
     #   * style:    blink bold clear underline
     #   * highligh: on_<color>
-
     def color(*args)
       say HighLine.default_instance.color(*args)
     end
@@ -135,7 +116,6 @@ module Commander
     #
     # * MacOS only
     #
-
     def speak(message, voice = :Alex, rate = 175)
       Thread.new { applescript "say #{message.inspect} using #{voice.to_s.inspect} speaking rate #{rate}" }
     end
@@ -164,10 +144,9 @@ module Commander
     #
     # * MacOS only
     #
-
     def converse(prompt, responses = {})
       i, commands = 0, responses.map { |_key, value| value.inspect }.join(',')
-      statement = responses.inject '' do |inner_statement, (key, value)|
+      statement = responses.inject(+'') do |inner_statement, (key, value)|
         inner_statement <<
         (
           (i += 1) == 1 ?
@@ -189,7 +168,6 @@ module Commander
 
     ##
     # Execute apple _script_.
-
     def applescript(script)
       `osascript -e "#{ script.gsub('"', '\"') }"`
     end
@@ -218,7 +196,6 @@ module Commander
     #     end
     #   end
     #
-
     def io(input = nil, output = nil, &block)
       orig_stdin, orig_stdout = $stdin, $stdout
       $stdin = File.new(input) if input
@@ -226,16 +203,15 @@ module Commander
       return unless block
 
       yield
-      $stdin, $stdout = orig_stdin, orig_stdout
-      reset_io
+    ensure
+      $stdin, $stdout = orig_stdin, orig_stdout if block
     end
 
     ##
     # Find an editor available in path. Optionally supply the _preferred_
     # editor. Returns the name as a string, nil if none is available.
-
     def available_editor(preferred = nil)
-      [preferred, ENV['EDITOR'], 'mate -w', 'vim', 'vi', 'emacs', 'nano', 'pico']
+      [preferred, ENV.fetch('EDITOR', nil), 'mate -w', 'vim', 'vi', 'emacs', 'nano', 'pico']
         .compact
         .find { |name| system("hash #{name.split.first} 2>&-") }
     end
@@ -252,7 +228,6 @@ module Commander
     #   ask_editor('foo')         # => prompts EDITOR with default text of 'foo'
     #   ask_editor('foo', 'mate -w')  # => prompts TextMate with default text of 'foo'
     #
-
     def ask_editor(input = nil, preferred_editor = nil)
       editor = available_editor preferred_editor
       program = Commander::Runner.instance.program(:name).downcase rescue 'commander'
@@ -260,7 +235,7 @@ module Commander
       begin
         tmpfile.write input if input
         tmpfile.close
-        system("#{editor} #{tmpfile.path.shellescape}") ? IO.read(tmpfile.path) : nil
+        system("#{editor} #{tmpfile.path.shellescape}") ? File.read(tmpfile.path) : nil
       ensure
         tmpfile.unlink
       end
@@ -268,7 +243,6 @@ module Commander
 
     ##
     # Enable paging of output after called.
-
     def enable_paging
       return unless $stdout.tty?
       return unless Process.respond_to? :fork
@@ -312,7 +286,6 @@ module Commander
     #     res = open uri
     #   end
     #
-
     def progress(arr, options = {})
       bar = ProgressBar.new arr.length, options
       bar.show
@@ -320,10 +293,18 @@ module Commander
     end
 
     ##
-    # Implements ask_for_CLASS methods.
-
+    # Implements +ask_for_CLASS+ methods, e.g. +ask_for_float+,
+    # +ask_for_date+, or +ask_for_pathname+: each prompts the user via
+    # HighLine and parses the response as the requested class. Common
+    # classes (Float, Integer, String, Symbol, Regexp, Array, File,
+    # Pathname) get explicit methods defined below; any other class that
+    # responds to +.parse+ (Date, Time, URI, ...) is resolved dynamically
+    # by #method_missing.
     module AskForClass
-      DEPRECATED_CONSTANTS = %i[Config TimeoutError MissingSourceFile NIL TRUE FALSE Fixnum Bignum Data].freeze
+      # Constants that are either deprecated (and would warn when read via
+      # Object.const_get) or simply not meant to be treated as ask_for_*
+      # targets; skipped while scanning Object.constants in #method_missing.
+      DEPRECATED_CONSTANTS = %i[Config TimeoutError MissingSourceFile NIL TRUE FALSE Fixnum Bignum Data ScanError SortedSet].freeze
 
       # define methods for common classes
       [Float, Integer, String, Symbol, Regexp, Array, File, Pathname].each do |klass|
@@ -332,7 +313,14 @@ module Commander
         end
       end
 
-      def method_missing(method_name, *arguments, &block)
+      ##
+      # Handles <tt>ask_for_*</tt> calls not covered by one of the
+      # explicitly defined methods above, by searching for a same-named
+      # top-level class that implements +.parse+ and asking HighLine to
+      # parse the response as that class. Falls through to +super+ (and
+      # so ultimately raises NoMethodError) for unrecognized method names
+      # or unrecognized classes.
+      def method_missing(method_name, *arguments, &)
         if method_name.to_s =~ /^ask_for_(.*)/
           if arguments.count != 1
             fail ArgumentError, "wrong number of arguments (given #{arguments.count}, expected 1)"
@@ -345,10 +333,7 @@ module Commander
           # Ignore constants that trigger deprecation warnings
           available_classes = (Object.constants - DEPRECATED_CONSTANTS).map do |const|
             Object.const_get(const)
-          rescue RuntimeError
-            # Rescue errors in Ruby 3 for SortedSet:
-            # The `SortedSet` class has been extracted from the `set` library.
-          end.compact.select do |const|
+          end.select do |const|
             const.instance_of?(Class) && const.respond_to?(:parse)
           end
 
@@ -370,8 +355,7 @@ module Commander
 
     ##
     # Substitute _hash_'s keys with their associated values in _str_.
-
-    def replace_tokens(str, hash) #:nodoc:
+    def replace_tokens(str, hash) # :nodoc:
       hash.inject(str) do |string, (key, value)|
         string.gsub ":#{key}", value.to_s
       end
@@ -412,7 +396,6 @@ module Commander
     #     { :uri => uri } # Can now use :uri within :format option
     #   end
     #
-
     class ProgressBar
       ##
       # Creates a new progress bar.
@@ -438,7 +421,6 @@ module Commander
       #   :time_elapsed
       #   :time_remaining
       #
-
       def initialize(total, options = {})
         @total_steps, @step, @start_time = total, 0, Time.now
         @title = options.fetch :title, 'Progress'
@@ -452,7 +434,6 @@ module Commander
 
       ##
       # Completion percentage.
-
       def percent_complete
         if @total_steps.zero?
           100
@@ -463,35 +444,30 @@ module Commander
 
       ##
       # Time that has elapsed since the operation started.
-
       def time_elapsed
         Time.now - @start_time
       end
 
       ##
       # Estimated time remaining.
-
       def time_remaining
         (time_elapsed / @step) * steps_remaining
       end
 
       ##
       # Number of steps left.
-
       def steps_remaining
         @total_steps - @step
       end
 
       ##
       # Formatted progress bar.
-
       def progress_bar
         (@progress_str * (@width * percent_complete / 100)).ljust @width, @incomplete_str
       end
 
       ##
       # Generates tokens for this step.
-
       def generate_tokens
         {
           title: @title,
@@ -507,7 +483,6 @@ module Commander
 
       ##
       # Output the progress bar.
-
       def show
         return if finished?
 
@@ -521,14 +496,12 @@ module Commander
 
       ##
       # Whether or not the operation is complete, and we have finished.
-
       def finished?
         @step == @total_steps + 1
       end
 
       ##
       # Whether or not the operation has completed.
-
       def completed?
         @step == @total_steps
       end
@@ -536,7 +509,6 @@ module Commander
       ##
       # Increment progress. Optionally pass _tokens_ which
       # can be displayed in the output format.
-
       def increment(tokens = {})
         @step += 1
         @tokens.merge! tokens if tokens.is_a? Hash
@@ -545,7 +517,6 @@ module Commander
 
       ##
       # Erase previous terminal line.
-
       def erase_line
         # highline does not expose the output stream
         HighLine.default_instance.instance_variable_get('@output').print "\r\e[K"

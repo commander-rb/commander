@@ -18,18 +18,13 @@ Gem::Specification.new do |s|
     'documentation_uri' => "https://www.rubydoc.info/gems/commander/#{s.version}",
     'homepage_uri' => s.homepage,
     'source_code_uri' => "#{s.homepage}/tree/v#{s.version}",
+    'rubygems_mfa_required' => 'true',
   }
-  s.required_ruby_version = '>= 3.0'
+  s.required_ruby_version = '>= 3.1'
 
   s.files         = `git ls-files`.split("\n").reject { |f| f.match(%r{^(test|spec|features)/}) }
-  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
   s.require_paths = ['lib']
 
-  s.add_runtime_dependency('highline', '~> 3.0.0')
-
-  s.add_development_dependency('rake')
-  s.add_development_dependency('rspec', '~> 3.2')
-  s.add_development_dependency('rubocop', '~> 1.12.1')
-  s.add_development_dependency('simplecov')
+  s.add_dependency('highline', '~> 3.1')
 end

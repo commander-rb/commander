@@ -3,13 +3,23 @@
 require 'optparse'
 
 module Commander
+  ##
+  # = Runner
+  #
+  # The engine behind Commander's DSL: holds the registered commands,
+  # global options, and program metadata, parses ARGV, and dispatches to
+  # the matched Commander::Command. Accessed as a singleton
+  # (Runner.instance) by Commander::Delegates so that the top-level
+  # +command+/+program+/+run!+ methods all operate on the same runner.
   class Runner
     #--
     # Exceptions
     #++
 
+    # Raised when required program information (e.g. :version) is missing.
     class CommandError < StandardError; end
 
+    # Raised when no command matches the given arguments.
     class InvalidCommandError < CommandError; end
 
     attr_reader :commands, :options, :help_formatter_aliases
@@ -17,7 +27,6 @@ module Commander
     ##
     # Initialize a new command runner. Optionally
     # supplying _args_ for mocking, or arbitrary usage.
-
     def initialize(args = ARGV)
       @args, @commands, @aliases, @options = args, {}, {}, []
       @help_formatter_aliases = help_formatter_alias_defaults
@@ -29,14 +38,12 @@ module Commander
 
     ##
     # Return singleton Runner instance.
-
     def self.instance
       @instance ||= new
     end
 
     ##
     # Run command parsing and execution process.
-
     def run!
       trace = @always_trace || false
       require_program :version, :description
@@ -78,14 +85,12 @@ module Commander
 
     ##
     # Return program version.
-
     def version
       format('%s %s', program(:name), program(:version))
     end
 
     ##
     # Enable tracing on all executions (bypasses --trace)
-
     def always_trace!
       @always_trace = true
       @never_trace = false
@@ -93,7 +98,6 @@ module Commander
 
     ##
     # Hide the trace option from the help menus and don't add it as a global option
-
     def never_trace!
       @never_trace = true
       @always_trace = false
@@ -127,7 +131,6 @@ module Commander
     #   :help_paging     Flag for toggling help paging
     #   :int_message     Message to display when interrupted (CTRL + C)
     #
-
     def program(key, *args, &block)
       if key == :help && !args.empty?
         @program[:help] ||= {}
@@ -138,7 +141,7 @@ module Commander
         @program[key] = block
       else
         unless args.empty?
-          @program[key] = args.count == 1 ? args[0] : args
+          @program[key] = args.length == 1 ? args[0] : args
         end
         @program[key]
       end
@@ -157,7 +160,6 @@ module Commander
     #     end
     #   end
     #
-
     def command(name, &block)
       yield add_command(Commander::Command.new(name)) if block
       @commands[name.to_s]
@@ -166,7 +168,6 @@ module Commander
     ##
     # Add a global option; follows the same syntax as Command#option
     # This would be used for switches such as --version, --trace, etc.
-
     def global_option(*args, &block)
       switches, description = Runner.separate_switches_from_description(*args)
       @options << {
@@ -180,7 +181,6 @@ module Commander
     ##
     # Alias command _name_ with _alias_name_. Optionally _args_ may be passed
     # as if they were being passed straight to the original command via the command-line.
-
     def alias_command(alias_name, name, *args)
       @commands[alias_name.to_s] = command name
       @aliases[alias_name.to_s] = args
@@ -189,37 +189,32 @@ module Commander
     ##
     # Default command _name_ to be used when no other
     # command is found in the arguments.
-
     def default_command(name)
       @default_command = name
     end
 
     ##
     # Add a command object to this runner.
-
     def add_command(command)
       @commands[command.name] = command
     end
 
     ##
     # Check if command _name_ is an alias.
-
     def alias?(name)
       @aliases.include? name.to_s
     end
 
     ##
     # Check if a command _name_ exists.
-
     def command_exists?(name)
       @commands[name.to_s]
     end
 
-    #:stopdoc:
+    # :stopdoc:
 
     ##
     # Get active command within arguments passed to this runner.
-
     def active_command
       @active_command ||= command(command_name_from_args)
     end
@@ -228,14 +223,12 @@ module Commander
     # Attempts to locate a command name from within the arguments.
     # Supports multi-word commands, using the largest possible match.
     # Returns the default command, if no valid commands found in the args.
-
     def command_name_from_args
-      @command_name_from_args ||= (longest_valid_command_name_from(@args) || @default_command)
+      @command_name_from_args ||= longest_valid_command_name_from(@args) || @default_command
     end
 
     ##
     # Returns array of valid command names found within _args_.
-
     def valid_command_names_from(*args)
       remove_global_options options, args
       arg_string = args.delete_if { |value| value =~ /^-/ }.join ' '
@@ -244,14 +237,12 @@ module Commander
 
     ##
     # Help formatter instance.
-
     def help_formatter
       @help_formatter ||= program(:help_formatter).new self
     end
 
     ##
     # Return arguments without the command name.
-
     def args_without_command_name
       removed = []
       parts = command_name_from_args.split rescue []
@@ -262,7 +253,6 @@ module Commander
 
     ##
     # Returns hash of help formatter alias defaults.
-
     def help_formatter_alias_defaults
       {
         compact: HelpFormatter::TerminalCompact,
@@ -271,7 +261,6 @@ module Commander
 
     ##
     # Returns hash of program defaults.
-
     def program_defaults
       {
         help_formatter: HelpFormatter::Terminal,
@@ -283,7 +272,6 @@ module Commander
     ##
     # Creates default commands such as 'help' which is
     # essentially the same as using the --help switch.
-
     def create_default_commands
       command :help do |c|
         c.syntax = 'commander help [command]'
@@ -309,7 +297,6 @@ module Commander
 
     ##
     # Raises InvalidCommandError when a _command_ is not found.
-
     def require_valid_command(command = active_command)
       fail InvalidCommandError, 'invalid command', caller if command.nil?
     end
@@ -318,7 +305,6 @@ module Commander
     # Removes global _options_ from _args_. This prevents an invalid
     # option error from occurring when options are parsed
     # again for the command.
-
     def remove_global_options(options, args)
       options.each do |option|
         switches = option[:switches]
@@ -358,8 +344,8 @@ module Commander
     def expand_optionally_negative_switches(switches)
       switches.reduce([]) do |memo, val|
         if val =~ /\[no-\]/
-          memo << val.gsub(/\[no-\]/, '')
-          memo << val.gsub(/\[no-\]/, 'no-')
+          memo << val.gsub('[no-]', '')
+          memo << val.gsub('[no-]', 'no-')
         else
           memo << val
         end
@@ -368,7 +354,6 @@ module Commander
 
     ##
     # Parse global command options.
-
     def parse_global_options
       parser = options.inject(OptionParser.new) do |options, option|
         options.on(*option[:args], &global_option_proc(option[:switches], &option[:proc]))
@@ -389,7 +374,6 @@ module Commander
     # This functionality works whether a block is present for the global
     # option or not, so simple switches such as --verbose can be used
     # without a block, and used throughout all commands.
-
     def global_option_proc(switches, &block)
       lambda do |value|
         unless active_command.nil?
@@ -401,7 +385,6 @@ module Commander
 
     ##
     # Raises a CommandError when the program any of the _keys_ are not present, or empty.
-
     def require_program(*keys)
       keys.each do |key|
         fail CommandError, "program #{key} required" if program(key).nil? || program(key).empty?
@@ -410,7 +393,6 @@ module Commander
 
     ##
     # Return switches and description separated from the _args_ passed.
-
     def self.separate_switches_from_description(*args)
       switches = args.find_all { |arg| arg.to_s =~ /^-/ }
       description = args.last if args.last.is_a?(String) && !args.last.match(/^-/)
@@ -428,14 +410,12 @@ module Commander
     #   --file FILE        # => :file
     #   --list of,things   # => :list
     #
-
     def self.switch_to_sym(switch)
-      switch.scan(/[\-\]](\w+)/).join('_').to_sym rescue nil
+      switch.scan(/[-\]](\w+)/).join('_').to_sym rescue nil
     end
 
     ##
     # Run the active command.
-
     def run_active_command
       require_valid_command
       if alias? command_name_from_args
@@ -445,7 +425,7 @@ module Commander
       end
     end
 
-    def say(*args) #:nodoc:
+    def say(*args) # :nodoc:
       HighLine.default_instance.say(*args)
     end
 
@@ -454,7 +434,6 @@ module Commander
     ##
     # Attempts to locate a command name from within the provided arguments.
     # Supports multi-word commands, using the largest possible match.
-
     def longest_valid_command_name_from(args)
       valid_command_names_from(*args.dup).max
     end

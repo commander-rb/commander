@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+##
+# Adds Array.parse, used by HighLine's #ask/#ask_for_array so that
+# +ask '...', Array+ splits a raw response into a Ruby Array.
 class Array
   ##
   # Split _string_ into an array. Used in
@@ -17,7 +20,6 @@ class Array
   #   # or use ask_for_CLASS
   #   list = ask_for_array 'Favorite cookies: '
   #
-
   def self.parse(string)
     # Using reverse + lookahead to work around Ruby 1.8's lack of lookbehind
     # TODO: simplify now that we don't support Ruby 1.8
