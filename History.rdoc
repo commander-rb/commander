@@ -1,3 +1,10 @@
+=== 6.0.0 / 2026-08-01
+
+* Drop support for Ruby 3.0; require Ruby >= 3.1 (#104). (@dior001)
+* Update highline dependency to ~> 3.1 (#104). (@dior001)
+* Modernize the codebase for the current Ruby ecosystem, including frozen string literals and anonymous block forwarding (#104). (@dior001)
+* Fix `SortedSet` error on Ruby 3.2+, where it was extracted from the `set` library (#104).
+
 === 5.0.0 / 2024-01-15
 
 * Drop support for Ruby < 3.0; update highline dependency to ~3.0 (#102). (@belousovAV)
